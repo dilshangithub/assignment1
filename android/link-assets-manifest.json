@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Dr.Stronge.otf",
+      "sha1": "d43ac63992510acb96b1f876e338892bacb59225"
+    },
+    {
+      "path": "assets/fonts/Dr.Stronge.ttf",
+      "sha1": "10f23e062bd018c2433607e84376a37db644109d"
+    },
+    {
+      "path": "assets/fonts/Kids Edition.otf",
+      "sha1": "decdb3833eabc8a434314f234fc26e7974cc0d76"
+    },
+    {
+      "path": "assets/fonts/Kids Edition.ttf",
+      "sha1": "b71dac7f4e868c5789d048d31e1fcf06fa8cb108"
+    }
+  ]
+}
