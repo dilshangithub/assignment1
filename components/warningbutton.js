@@ -10,7 +10,7 @@ const WarningButton = props => {
         colors={['#FFB200', '#E08400', '#D45A00']}
         start={{x: 0, y: 0}} // Gradient starting coordinates
         end={{x: 0, y: 0.5}} // Gradient ending coordinates
-        style={styles.appButtonContainer}>
+        style={styles.gradient}>
         <Text style={{...FONTS.button}}>{props.title}</Text>
       </LinearGradient>
     </TouchableOpacity>
@@ -18,18 +18,21 @@ const WarningButton = props => {
 };
 
 const styles = StyleSheet.create({
-  appButtonContainer: {
+  gradient: {
     alignItems: 'center',
-    elevation: 8,
+    justifyContent: 'center',
     borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
     borderWidth: 2,
     borderColor: '#b34700',
-
-    padding: 10,
-    marginTop: 16,
     height: 60,
+  },
+  appButtonContainer: {
+    //shadow
+    // shadowColor:'black',
+    // shadowOffset:{width:5,height:2},
+    // shadowOpacity:10,
+    // shadowRadius:10,
+    // elevation:8,
   },
 });
 

@@ -13,7 +13,6 @@ const HomeScreen = ({navigation}) => {
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1, backgroundColor: '#ebebe0'}}>
         <View style={{flex: 1, justifyContent: 'center'}}>
-          {/* <Mytext text="SQLite Example" /> */}
 
           <View style={{marginLeft: 125, marginRight: 125}}>
             <SuccessButton
@@ -21,7 +20,7 @@ const HomeScreen = ({navigation}) => {
               customClick={() => navigation.navigate('GameScreen')}
             />
           </View>
-          <View style={{marginLeft: 125, marginRight: 125}}>
+          <View style={{marginLeft: 125, marginRight: 125, marginTop:15}}>
             <WarningButton
               title="Login"
               customClick={() => navigation.navigate('LoginScreen')}

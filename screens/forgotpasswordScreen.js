@@ -74,7 +74,14 @@ const ForgotPasswordScreen = ({navigation}) => {
           <Text style={{...FONTS.header1, marginTop: 25, color: '#ff6600'}}>
             Forgot your password?
           </Text>
-          <Text style={{...FONTS.header2, marginTop: 25, color: '#39B404', marginLeft:20,marginRight:20}}>
+          <Text
+            style={{
+              ...FONTS.header2,
+              marginTop: 25,
+              color: '#39B404',
+              marginLeft: 20,
+              marginRight: 20,
+            }}>
             Don't worry.Enter your email address to reset your password.
           </Text>
           <View
@@ -87,11 +94,12 @@ const ForgotPasswordScreen = ({navigation}) => {
                 onChangeText={email => setEmail(email)}
               />
             </View>
-
-            <SuccessButton
-              title="Reset Password"
-              customClick={() => console.log('reset password')}
-            />
+            <View style={{marginTop: 15}}>
+              <SuccessButton
+                title="Reset Password"
+                customClick={() => console.log('reset password')}
+              />
+            </View>
           </View>
         </View>
       </View>

@@ -26,8 +26,8 @@ export const FONTS = {
   },
   header3: {
     fontFamily: 'Dr.Stronge',
-    // textAlign: 'center',
-    fontSize: 15
+    fontSize: 18,
+    letterSpacing: 1,
   },
   // body4: { fontFamily: "Dr.Stronge", lineHeight: 22 },
   // body5: { fontFamily: "Dr.Stronge", lineHeight: 22 },

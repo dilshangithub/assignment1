@@ -126,10 +126,12 @@ const LoginScreen = ({navigation}) => {
                 customClick={() => navigation.navigate('ForgotPasswordScreen')}
               />
             </View>
-            <SuccessButton
-              title="LOGIN"
-              customClick={() => console.log('login')}
-            />
+            <View style={{marginTop: 20}}>
+              <SuccessButton
+                title="LOGIN"
+                customClick={() => console.log('login')}
+              />
+            </View>
           </View>
         </View>
       </View>

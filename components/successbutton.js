@@ -5,12 +5,14 @@ import {FONTS} from './theme';
 
 const SuccessButton = props => {
   return (
-    <TouchableOpacity onPress={props.customClick}>
+    <TouchableOpacity
+      onPress={props.customClick}
+      style={styles.appButtonContainer}>
       <LinearGradient
         colors={['#4AD400', '#39B404', '#287D02']}
-        start={{x: 0, y: 0}} // Gradient starting coordinates
-        end={{x: 0, y: 0.5}} // Gradient ending coordinates
-        style={styles.appButtonContainer}>
+        start={{x: 0, y: 0}} // Gradient starting
+        end={{x: 0, y: 0.5}} // Gradient ending
+        style={styles.gradient}>
         <Text style={{...FONTS.button}}>{props.title}</Text>
       </LinearGradient>
     </TouchableOpacity>
@@ -18,18 +20,21 @@ const SuccessButton = props => {
 };
 
 const styles = StyleSheet.create({
-  appButtonContainer: {
+  gradient: {
     alignItems: 'center',
-    elevation: 8,
+    justifyContent: 'center',
     borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
     borderWidth: 2,
     borderColor: '#009933',
-
-    padding: 10,
-    marginTop: 16,
     height: 60,
+  },
+  appButtonContainer: {
+    //shadow
+    // shadowColor:'black',
+    // shadowOffset:{width:5,height:2},
+    // shadowOpacity:10,
+    // shadowRadius:10,
+    // elevation:8,
   },
 });
 

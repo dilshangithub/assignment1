@@ -53,7 +53,6 @@ const SignupScreen = ({navigation}) => {
                   marginLeft: 20,
                   marginBottom: 5,
                   ...FONTS.header3,
-                  fontWeight: 'bold',
                 }}>
                 Email
               </Text>
@@ -66,7 +65,6 @@ const SignupScreen = ({navigation}) => {
                   marginLeft: 20,
                   marginBottom: 5,
                   ...FONTS.header3,
-                  fontWeight: 'bold',
                 }}>
                 Password
               </Text>
@@ -101,7 +99,6 @@ const SignupScreen = ({navigation}) => {
                   marginLeft: 20,
                   marginBottom: 5,
                   ...FONTS.header3,
-                  fontWeight: 'bold',
                 }}>
                 Firsr Name
               </Text>
@@ -114,17 +111,18 @@ const SignupScreen = ({navigation}) => {
                   marginLeft: 20,
                   marginBottom: 5,
                   ...FONTS.header3,
-                  fontWeight: 'bold',
                 }}>
                 Last Name
               </Text>
               <View style={styles.inputView}>
                 <TextInput style={styles.TextInput} />
               </View>
-              <SuccessButton
-                title="Sign Up"
-                customClick={() => console.log('user signup')}
-              />
+              <View style={{marginTop: 20}}>
+                <SuccessButton
+                  title="Sign Up"
+                  customClick={() => console.log('user signup')}
+                />
+              </View>
             </View>
           </View>
         </View>
