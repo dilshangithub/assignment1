@@ -26,7 +26,7 @@ const App = () => {
           headerShown: false,
         }}
         // initialRouteName={'SignupScreen'}
-        >
+      >
         <Stack.Screen
           name="WelcomScreen"
           component={WelcomScreen}

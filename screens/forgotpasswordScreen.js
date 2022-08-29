@@ -16,59 +16,33 @@ import UrlButton from '../components/urlbutton';
 import {FONTS} from '../components/theme';
 import icons from '../components/icons';
 import images from '../components/images';
+import UpperNavBar from '../components/upperNavBar';
+import textInputValidateUtil from '../utils/textInputValidateUtil';
 
 KeepAwake.activate();
 
 const ForgotPasswordScreen = ({navigation}) => {
   useEffect(() => {}, []);
 
+  const [errorFlag, setErrorFlag] = useState({});
   const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  const [showPassword, setshowPassword] = useState(false);
+
+  const resetMyPassword = () => {
+    let error = textInputValidateUtil.validateForgotPasswordForm(email);
+
+    if (error) {
+      setErrorFlag(error);
+      return;
+    }
+
+    setErrorFlag({});
+    alert('success');
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1, backgroundColor: '#ebebe0'}}>
-        <View
-          style={{
-            width: '100%',
-            borderBottomWidth: 3,
-            marginRight: 20,
-            marginBottom: 20,
-            backgroundColor: '#d6d6c2',
-            borderColor: '#c2c2a3',
-          }}>
-          <TouchableOpacity
-            style={{
-              // position:'relative',
-              height: 50,
-              width: 30,
-              marginLeft: 10,
-              marginTop: 10,
-            }}
-            onPress={() => navigation.navigate('LoginScreen')}>
-            <Image
-              source={icons.back}
-              style={{
-                marginLeft: 5,
-                marginTop: 5,
-                height: 30,
-                width: 30,
-                tintColor: '#7a7a52',
-              }}
-            />
-          </TouchableOpacity>
-          <View style={{position: 'absolute', marginLeft: '45%'}}>
-            <Image
-              source={images.logo}
-              style={{
-                marginTop: 5,
-                height: 50,
-                width: 50,
-              }}
-            />
-          </View>
-        </View>
+        <UpperNavBar navigation={navigation} />
 
         <View style={{flex: 1}}>
           <Text style={{...FONTS.header1, marginTop: 25, color: '#ff6600'}}>
@@ -91,13 +65,20 @@ const ForgotPasswordScreen = ({navigation}) => {
                 style={styles.TextInput}
                 placeholder="Email"
                 placeholderTextColor="#c2c2a3"
-                onChangeText={email => setEmail(email)}
+                onChangeText={value => setEmail(value)}
               />
             </View>
+
+            <View style={{marginTop: -20, marginBottom: 15, marginLeft: 20}}>
+                {Boolean(errorFlag.emailError) && (
+                  <Text style={{color: 'red'}}>{errorFlag.emailError}</Text>
+                )}
+              </View>
+
             <View style={{marginTop: 15}}>
               <SuccessButton
                 title="Reset Password"
-                customClick={() => console.log('reset password')}
+                customClick={() => resetMyPassword()}
               />
             </View>
           </View>

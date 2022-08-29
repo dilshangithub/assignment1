@@ -7,6 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,126 +19,130 @@ import UrlButton from '../components/urlbutton';
 import {FONTS} from '../components/theme';
 import icons from '../components/icons';
 import images from '../components/images';
+import UpperNavBar from '../components/upperNavBar';
+import textInputValidateUtil from '../utils/textInputValidateUtil';
 
 KeepAwake.activate();
 
 const LoginScreen = ({navigation}) => {
   useEffect(() => {}, []);
 
-  const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [errorFlag, setErrorFlag] = React.useState({});
+
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [showPassword, setshowPassword] = useState(false);
 
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, backgroundColor: '#ebebe0'}}>
-        <View
-          style={{
-            width: '100%',
-            borderBottomWidth: 3,
-            marginRight: 20,
-            marginBottom: 20,
-            backgroundColor: '#d6d6c2',
-            borderColor: '#c2c2a3',
-          }}>
-          <TouchableOpacity
-            style={{
-              // position:'relative',
-              height: 50,
-              width: 30,
-              marginLeft: 10,
-              marginTop: 10,
-            }}
-            onPress={() => navigation.navigate('HomeScreen')}>
-            <Image
-              source={icons.back}
-              style={{
-                marginLeft: 5,
-                marginTop: 5,
-                height: 30,
-                width: 30,
-                tintColor: '#7a7a52',
-              }}
-            />
-          </TouchableOpacity>
-          <View style={{position: 'absolute', marginLeft: '45%'}}>
-            <Image
-              source={images.logo}
-              style={{
-                marginTop: 5,
-                height: 50,
-                width: 50,
-              }}
-            />
-          </View>
-        </View>
 
-        <View style={{flex: 1}}>
-          <Text style={{...FONTS.header1, marginTop: 25, color: '#ff6600'}}>
-            Login to Your Account
-          </Text>
-          <View style={{marginTop: 15}}>
-            <UrlButton
-              title="Don't have an account? Sign up"
-              customClick={() => navigation.navigate('SignupScreen')}
-            />
-          </View>
+  const loginMe = () => {
+    const error = textInputValidateUtil.validateLoginForm(email, password);
 
-          <View
-            style={{flex: 1, marginTop: 40, marginLeft: 30, marginRight: 30}}>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholder="Email"
-                placeholderTextColor="#c2c2a3"
-                onChangeText={email => setEmail(email)}
-              />
-            </View>
+    if (error) {
+      setErrorFlag(error);
+      return;
+    }
 
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholder="Password"
-                placeholderTextColor="#c2c2a3"
-                secureTextEntry={!showPassword}
-                // onChangeText={(showPassword) => setPassword(showPassword)}
-              />
-              <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 5,
-                  height: 30,
-                  width: 30,
-                }}
-                onPress={() => setshowPassword(!showPassword)}>
-                <Image
-                  source={showPassword ? icons.disable_eye : icons.enable_eye}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    tintColor: '#7a7a52',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
+    setErrorFlag({});
+    // todo
+    alert('success');
+  };
 
+  function renderLoginView() {
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <View style={{flex: 1, backgroundColor: '#ebebe0'}}>
+          {/* Body */}
+          <View style={{flex: 1}}>
+            <Text style={{...FONTS.header1, marginTop: 25, color: '#ff6600'}}>
+              Login to Your Account
+            </Text>
             <View style={{marginTop: 15}}>
               <UrlButton
-                title="Forgot Password?"
-                customClick={() => navigation.navigate('ForgotPasswordScreen')}
+                title="Don't have an account? Sign up"
+                customClick={() => navigation.navigate('SignupScreen')}
               />
             </View>
-            <View style={{marginTop: 20}}>
-              <SuccessButton
-                title="LOGIN"
-                customClick={() => console.log('login')}
-              />
+
+            <View
+              style={{flex: 1, marginTop: 40, marginLeft: 30, marginRight: 30}}>
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.TextInput}
+                  placeholder="Email"
+                  placeholderTextColor="#c2c2a3"
+                  onChangeText={value => setEmail(value)}
+                />
+              </View>
+              <View style={{marginTop:-20, marginBottom:20, marginLeft:20}}>
+                {Boolean(errorFlag.emailError) && (
+                  <Text style={{color:'red'}}>{errorFlag.emailError}</Text>
+                )}
+              </View>
+
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.TextInput}
+                  placeholder="Password"
+                  placeholderTextColor="#c2c2a3"
+                  secureTextEntry={!showPassword}
+                  onChangeText={value => setPassword(value)}
+                />
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    bottom: 5,
+                    height: 30,
+                    width: 30,
+                  }}
+                  onPress={() => setshowPassword(!showPassword)}>
+                  <Image
+                    source={showPassword ? icons.disable_eye : icons.enable_eye}
+                    style={{
+                      height: 20,
+                      width: 20,
+                      tintColor: '#7a7a52',
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={{marginTop:-20, marginBottom:20, marginLeft:20}}>
+                {Boolean(errorFlag.passwordError) && (
+                  <Text style={{color:'red'}}>{errorFlag.passwordError}</Text>
+                )}
+              </View>
+
+
+              <View style={{marginTop: 15}}>
+                <UrlButton
+                  title="Forgot Password?"
+                  customClick={() =>
+                    navigation.navigate('ForgotPasswordScreen')
+                  }
+                />
+              </View>
+
+              <View style={{marginTop: 20}}>
+                <SuccessButton title="LOGIN" customClick={() => loginMe()} />
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    );
+  }
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.android === 'android' ? 'padding' : null}
+      style={{flex: 1}}>
+
+      <UpperNavBar navigation={navigation}/>
+
+      <LinearGradient colors={['#ebebe0', '#ebebe0']} style={{flex: 1}}>
+        <ScrollView>{renderLoginView()}</ScrollView>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 };
 
