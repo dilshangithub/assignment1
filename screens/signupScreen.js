@@ -21,14 +21,41 @@ import SuccessButton from '../components/successbutton';
 import UrlButton from '../components/urlbutton';
 import {FONTS} from '../components/theme';
 import icons from '../components/icons';
+import UpperNavBar from '../components/upperNavBar';
 import images from '../components/images';
+import textInputValidateUtil from '../utils/textInputValidateUtil';
 
 KeepAwake.activate();
 
 const SignupScreen = ({navigation}) => {
   useEffect(() => {}, []);
 
+  const [errorFlag, setErrorFlag] = React.useState({});
+
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+
   const [showPassword, setshowPassword] = useState(false);
+
+  const signupMe = () => {
+    const error = textInputValidateUtil.validateSignupForm(
+      email,
+      password,
+      firstName,
+      lastName,
+    );
+
+    if (error) {
+      setErrorFlag(error);
+      return;
+    }
+
+    setErrorFlag({});
+    // todo
+    alert('success');
+  };
 
   function rendersignupView() {
     return (
@@ -57,7 +84,15 @@ const SignupScreen = ({navigation}) => {
                 Email
               </Text>
               <View style={styles.inputView}>
-                <TextInput style={styles.TextInput} />
+                <TextInput
+                  style={styles.TextInput}
+                  onChangeText={value => setEmail(value)}
+                />
+              </View>
+              <View style={{marginTop: -20, marginBottom: 15, marginLeft: 20}}>
+                {Boolean(errorFlag.emailError) && (
+                  <Text style={{color: 'red'}}>{errorFlag.emailError}</Text>
+                )}
               </View>
 
               <Text
@@ -72,7 +107,7 @@ const SignupScreen = ({navigation}) => {
                 <TextInput
                   style={styles.TextInput}
                   secureTextEntry={!showPassword}
-                  // onChangeText={(showPassword) => setPassword(showPassword)}
+                  onChangeText={value => setPassword(value)}
                 />
                 <TouchableOpacity
                   style={{
@@ -94,6 +129,12 @@ const SignupScreen = ({navigation}) => {
                 </TouchableOpacity>
               </View>
 
+              <View style={{marginTop: -20, marginBottom: 15, marginLeft: 20}}>
+                {Boolean(errorFlag.passwordError) && (
+                  <Text style={{color: 'red'}}>{errorFlag.passwordError}</Text>
+                )}
+              </View>
+
               <Text
                 style={{
                   marginLeft: 20,
@@ -103,7 +144,16 @@ const SignupScreen = ({navigation}) => {
                 Firsr Name
               </Text>
               <View style={styles.inputView}>
-                <TextInput style={styles.TextInput} />
+                <TextInput
+                  style={styles.TextInput}
+                  onChangeText={value => setFirstName(value)}
+                />
+              </View>
+
+              <View style={{marginTop: -20, marginBottom: 15, marginLeft: 20}}>
+                {Boolean(errorFlag.firstNameError) && (
+                  <Text style={{color: 'red'}}>{errorFlag.firstNameError}</Text>
+                )}
               </View>
 
               <Text
@@ -115,13 +165,20 @@ const SignupScreen = ({navigation}) => {
                 Last Name
               </Text>
               <View style={styles.inputView}>
-                <TextInput style={styles.TextInput} />
-              </View>
-              <View style={{marginTop: 20}}>
-                <SuccessButton
-                  title="Sign Up"
-                  customClick={() => console.log('user signup')}
+                <TextInput
+                  style={styles.TextInput}
+                  onChangeText={value => setLastName(value)}
                 />
+              </View>
+
+              <View style={{marginTop: -20, marginBottom: 15, marginLeft: 20}}>
+                {Boolean(errorFlag.lastNameError) && (
+                  <Text style={{color: 'red'}}>{errorFlag.lastNameError}</Text>
+                )}
+              </View>
+
+              <View style={{marginTop: 20}}>
+                <SuccessButton title="Sign Up" customClick={() => signupMe()} />
               </View>
             </View>
           </View>
@@ -134,69 +191,7 @@ const SignupScreen = ({navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.android === 'android' ? 'padding' : null}
       style={{flex: 1}}>
-      {/* Header */}
-      <View
-        style={{
-          width: '100%',
-          borderBottomWidth: 3,
-          marginRight: 20,
-          // marginBottom: 20,
-          backgroundColor: '#d6d6c2',
-          borderColor: '#c2c2a3',
-        }}>
-        {/* Back */}
-        <TouchableOpacity
-          style={{
-            height: 50,
-            width: 30,
-            marginLeft: 10,
-            marginTop: 10,
-          }}
-          onPress={() => navigation.navigate('LoginScreen')}>
-          <Image
-            source={icons.back}
-            style={{
-              marginLeft: 5,
-              marginTop: 5,
-              height: 30,
-              width: 30,
-              tintColor: '#7a7a52',
-            }}
-          />
-        </TouchableOpacity>
-        {/* Home */}
-        <View style={{position: 'absolute', right: 20}}>
-          <TouchableOpacity
-            style={{
-              height: 50,
-              width: 30,
-              marginTop: 10,
-            }}
-            onPress={() => navigation.navigate('HomeScreen')}>
-            <Image
-              source={icons.home}
-              style={{
-                marginLeft: 5,
-                marginTop: 5,
-                height: 30,
-                width: 30,
-                tintColor: '#7a7a52',
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-        {/* Logo */}
-        <View style={{position: 'absolute', marginLeft: '45%'}}>
-          <Image
-            source={images.logo}
-            style={{
-              marginTop: 5,
-              height: 50,
-              width: 50,
-            }}
-          />
-        </View>
-      </View>
+      <UpperNavBar navigation={navigation} />
 
       <LinearGradient colors={['#ebebe0', '#ebebe0']} style={{flex: 1}}>
         <ScrollView>{rendersignupView()}</ScrollView>
