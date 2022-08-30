@@ -5,6 +5,7 @@ import {View, TouchableOpacity, Image} from 'react-native';
 
 import icons from './icons';
 import images from './images';
+import soundEffectsUtil from '../utils/soundEffectsUtil'
 
 const upperNavBar = props => {
   return (
@@ -25,10 +26,12 @@ const upperNavBar = props => {
           marginLeft: 10,
           marginTop: 10,
         }}
-        onPress={() =>
+        onPress={() =>{
           props.navigation.canGoBack()
             ? props.navigation.goBack()
-            : props.navigation.navigate('HomeScreen')
+            : props.navigation.navigate('HomeScreen'),
+            soundEffectsUtil.touchableButtonSound();
+        }
         }>
         <Image
           source={icons.back}
@@ -49,7 +52,7 @@ const upperNavBar = props => {
             width: 30,
             marginTop: 10,
           }}
-          onPress={() => props.navigation.navigate('HomeScreen')}>
+          onPress={() => {props.navigation.navigate('HomeScreen'), soundEffectsUtil.touchableButtonSound();}}>
           <Image
             source={icons.home}
             style={{

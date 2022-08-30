@@ -20,7 +20,6 @@ KeepAwake.activate();
 const App = () => {
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator initialRouteName="WelcomScreen"> */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -33,11 +32,11 @@ const App = () => {
           options={{
             title: ' ', //Set Header Title
             headerStyle: {
-              backgroundColor: '#f4511e', //Set Header color
+              backgroundColor: '#f4511e',
             },
-            headerTintColor: '#fff', //Set Header text color
+            headerTintColor: '#fff',
             headerTitleStyle: {
-              fontWeight: 'bold', //Set Header text style
+              fontWeight: 'bold',
             },
           }}
         />

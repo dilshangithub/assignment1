@@ -10,16 +10,16 @@ import {
 } from 'react-native';
 import SuccessButton from '../components/successbutton';
 import images from '../components/images';
+import soundEffectsUtil from '../utils/soundEffectsUtil'
 
 KeepAwake.activate();
 
 const WelcomScreen = ({navigation}) => {
-  useEffect(() => {}, []);
+  soundEffectsUtil.backgroundSoundEffect();
 
   return (
     <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
       <View style={styles.container}>
-        {/* <View style={{ flex: 1 }}>  */}
         <ImageBackground
           source={images.welcome_background}
           resizeMode="cover"
@@ -29,7 +29,7 @@ const WelcomScreen = ({navigation}) => {
           <View style={{marginLeft: 125, marginRight: 125}}>
             <SuccessButton
               title="Continue"
-              customClick={() => navigation.navigate('HomeScreen')}
+              customClick={() => {navigation.navigate('HomeScreen'),soundEffectsUtil.touchableButtonSound()}}
             />
           </View>
         </ImageBackground>

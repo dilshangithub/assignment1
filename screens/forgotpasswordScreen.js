@@ -18,6 +18,7 @@ import icons from '../components/icons';
 import images from '../components/images';
 import UpperNavBar from '../components/upperNavBar';
 import textInputValidateUtil from '../utils/textInputValidateUtil';
+import soundEffectsUtil from '../utils/soundEffectsUtil'
 
 KeepAwake.activate();
 
@@ -78,7 +79,7 @@ const ForgotPasswordScreen = ({navigation}) => {
             <View style={{marginTop: 15}}>
               <SuccessButton
                 title="Reset Password"
-                customClick={() => resetMyPassword()}
+                customClick={() => {resetMyPassword(), soundEffectsUtil.touchableButtonSound()}}
               />
             </View>
           </View>
