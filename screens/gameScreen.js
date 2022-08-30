@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import SuccessButton from '../components/successbutton';
 
+
 KeepAwake.activate();
 
 const GameScreen = ({ navigation }) => {
