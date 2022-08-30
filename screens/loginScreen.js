@@ -18,9 +18,9 @@ import SuccessButton from '../components/successbutton';
 import UrlButton from '../components/urlbutton';
 import {FONTS} from '../components/theme';
 import icons from '../components/icons';
-import images from '../components/images';
 import UpperNavBar from '../components/upperNavBar';
 import textInputValidateUtil from '../utils/textInputValidateUtil';
+import soundEffectsUtil from '../utils/soundEffectsUtil'
 
 KeepAwake.activate();
 
@@ -59,7 +59,7 @@ const LoginScreen = ({navigation}) => {
             <View style={{marginTop: 15}}>
               <UrlButton
                 title="Don't have an account? Sign up"
-                customClick={() => navigation.navigate('SignupScreen')}
+                customClick={() => {navigation.navigate('SignupScreen'), soundEffectsUtil.touchableButtonSound()}}
               />
             </View>
 
@@ -117,14 +117,15 @@ const LoginScreen = ({navigation}) => {
               <View style={{marginTop: 15}}>
                 <UrlButton
                   title="Forgot Password?"
-                  customClick={() =>
-                    navigation.navigate('ForgotPasswordScreen')
-                  }
+                  customClick={() =>{
+                    navigation.navigate('ForgotPasswordScreen'),
+                    soundEffectsUtil.touchableButtonSound()
+                  }}
                 />
               </View>
 
               <View style={{marginTop: 20}}>
-                <SuccessButton title="LOGIN" customClick={() => loginMe()} />
+                <SuccessButton title="LOGIN" customClick={() => {loginMe(),soundEffectsUtil.touchableButtonSound()}} />
               </View>
             </View>
           </View>
