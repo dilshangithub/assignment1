@@ -57,9 +57,37 @@ function backgroundSoundEffect() {
   });
 }
 
+function crashedSound() {
+  Sound.setCategory('Playback');
+
+  var crashed = new Sound('crashed.mp3', Sound.MAIN_BUNDLE, error => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return;
+    }
+    // loaded successfully
+    console.log(
+      'duration in seconds: ' +
+      crashed.getDuration() +
+        'number of channels: ' +
+        crashed.getNumberOfChannels(),
+    );
+
+    // Play the sound with an onEnd callback
+    crashed.play(success => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+    });
+  });
+}
+
 const soundEffectsUtil = {
   touchableButtonSound,
   backgroundSoundEffect,
+  crashedSound
 };
 
 export default soundEffectsUtil;

@@ -9,7 +9,7 @@ const SuccessButton = props => {
       onPress={props.customClick}
       style={styles.appButtonContainer}>
       <LinearGradient
-        colors={['#4AD400', '#39B404', '#287D02']}
+        colors={['#e0ebeb', '#85adad', '#334d4d']}
         start={{x: 0, y: 0}} // Gradient starting
         end={{x: 0, y: 0.5}} // Gradient ending
         style={styles.gradient}>
@@ -23,9 +23,9 @@ const styles = StyleSheet.create({
   gradient: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
+    borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#009933',
+    borderColor: '#003333',
     height: 60,
   },
   appButtonContainer: {

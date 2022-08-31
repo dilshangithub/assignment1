@@ -53,7 +53,7 @@ const ForgotPasswordScreen = ({navigation}) => {
             style={{
               ...FONTS.header2,
               marginTop: 25,
-              color: '#39B404',
+              color: '#85adad',
               marginLeft: 20,
               marginRight: 20,
             }}>
@@ -92,7 +92,7 @@ const ForgotPasswordScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   inputView: {
     backgroundColor: 'white',
-    borderRadius: 25,
+    borderRadius: 10,
     width: '100%',
     height: 50,
     marginBottom: 20,

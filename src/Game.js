@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Alert, BackHandler} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  BackHandler,
+  Modal,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {
   accelerometer,
   setUpdateIntervalForType,
@@ -23,16 +32,23 @@ import Road from '../components/road';
 import images from '../components/images';
 import getRandomDecimal from './helpers/getRandomDecimal';
 import {car, floor, road} from './Objects';
+import soundEffectsUtil from '../utils/soundEffectsUtil';
+import icons from '../components/icons';
+import {FONTS} from '../components/theme';
+import SuccessButton from '../components/successbutton';
+import WarningButton from '../components/warningbutton';
 
-setUpdateIntervalForType(SensorTypes.accelerometer, 10);
+setUpdateIntervalForType(SensorTypes.accelerometer, 15);
 
-export default class World extends Component {
+export default class Game extends Component {
   state = {
     x: 0, // initial x position of the player's car
     y: DEVICE_HEIGHT - 200, // initial y position of the player's car
     isGameSetup: false, // if the world has been setup
     isGamePaused: false, // if the game is currently paused
     score: 0, // the current player score
+    isVisiblePopup: false,
+    message: '',
   };
 
   constructor(props) {
@@ -221,13 +237,16 @@ export default class World extends Component {
       }
 
       if (objA === 'car' && objB === 'opposing_car') {
-        this.gameOver('You bumped to another car!');
+        this.gameOver('You bumped to another vehicle!');
       }
     });
   };
 
   //Game over
   gameOver = msg => {
+    soundEffectsUtil.crashedSound();
+    this.state.message = msg;
+    this.state.isVisiblePopup = true;
     this.opposing_cars.forEach(item => {
       Matter.Body.set(item, {
         isStatic: true,
@@ -237,30 +256,29 @@ export default class World extends Component {
     this.setState({
       isGamePaused: true,
     });
-
-    Alert.alert(
-      `Game Over, ${msg}. Your Score is: ${this.state.score}`,
-      'Want to play again?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => {
-            this.accelerometer.unsubscribe();
-            BackHandler.exitApp();
-            // Alert.alert(
-            //   'Bye!',
-            //   'Just relaunch the app if you want to play again.',
-            // );
-          },
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            this.resetGame();
-          },
-        },
-      ],
-    );
+    // Alert.alert(
+    // `Game Over, ${msg}. Your Score is: ${this.state.score}`,
+    // 'Want to play again?',
+    // [
+    //   {
+    //     text: 'Cancel',
+    //     onPress: () => {
+    //       this.accelerometer.unsubscribe();
+    //       BackHandler.exitApp();
+    //       // Alert.alert(
+    //       //   'Bye!',
+    //       //   'Just relaunch the app if you want to play again.',
+    //       // );
+    //     },
+    //   },
+    //   {
+    //     text: 'OK',
+    //     onPress: () => {
+    //       this.resetGame();
+    //     },
+    //   },
+    // ],
+    // );
   };
 
   // next: add resetGame()
@@ -300,6 +318,93 @@ export default class World extends Component {
               <Text style={styles.scoreText}>Score: {score}</Text>
             </View>
           </View>
+
+          <Modal transparent={true} visible={this.state.isVisiblePopup}>
+            <View
+              style={{
+                flex: 1,
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  padding: 20,
+                  borderRadius: 20,
+                  height: '50%',
+                  marginLeft: 30,
+                  marginRight: 30,
+                  borderColor: '#73737',
+                  borderEndWidth: 2,
+                  backgroundColor: '#f0f5f5',
+                }}>
+                <Text
+                  style={{
+                    ...FONTS.KidsEdition,
+                    fontSize: 30,
+                    textAlign: 'center',
+                  }}>
+                  Game Over!
+                </Text>
+                <Text
+                  style={{
+                    ...FONTS.DrStronge,
+                    fontSize: 25,
+                    marginTop: 20,
+                    textAlign: 'center',
+                    // color: 'red',
+                  }}>
+                  {this.state.message}
+                </Text>
+
+                <Text
+                  style={{
+                    ...FONTS.DrStronge,
+                    fontSize: 25,
+                    marginTop: 10,
+                    textAlign: 'center',
+                    color: 'red',
+                  }}>
+                  Your Score is
+                </Text>
+                <Text
+                  style={{
+                    // ...FONTS.KidsEdition,
+                    fontSize: 30,
+                    marginTop: 10,
+                    textAlign: 'center',
+                    color: 'red',
+                    fontWeight: 'bold',
+                  }}>
+                  {this.state.score}
+                </Text>
+
+                <View style={{marginTop: 30}}>
+                  <View style={{}}>
+                    <SuccessButton
+                      title="Play Again"
+                      customClick={() => {
+                        this.resetGame(),
+                          soundEffectsUtil.touchableButtonSound(),
+                          (this.state.isVisiblePopup = false);
+                      }}
+                    />
+                  </View>
+
+                  <View style={{marginTop: 10}}>
+                    <WarningButton
+                      title="Exit"
+                      customClick={() => {
+                        this.accelerometer.unsubscribe(),
+                          soundEffectsUtil.touchableButtonSound(),
+                          BackHandler.exitApp(),
+                          (this.state.isVisiblePopup = false);
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </GameEngine>
       );
     }
@@ -315,7 +420,7 @@ export default class World extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#334d4d',
   },
   centered: {
     flex: 1,

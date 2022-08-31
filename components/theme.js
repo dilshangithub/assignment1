@@ -15,7 +15,7 @@ export const FONTS = {
   header1: {
     fontFamily: 'Dr.Stronge',
     textAlign: 'center',
-    fontSize: 40,
+    fontSize: 45,
     letterSpacing: 1,
   },
   header2: {

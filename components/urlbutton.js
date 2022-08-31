@@ -6,7 +6,7 @@ import {FONTS} from './theme';
 const UrlButton = props => {
   return (
     <TouchableOpacity onPress={props.customClick}>
-      <Text style={{...FONTS.header2, color: '#39B404'}}>{props.title}</Text>
+      <Text style={{...FONTS.header2, color: '#85adad'}}>{props.title}</Text>
     </TouchableOpacity>
   );
 };

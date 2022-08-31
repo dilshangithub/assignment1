@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import SuccessButton from '../components/successbutton';
 import images from '../components/images';
-import soundEffectsUtil from '../utils/soundEffectsUtil'
+import soundEffectsUtil from '../utils/soundEffectsUtil';
 
 KeepAwake.activate();
 
@@ -18,7 +18,7 @@ const WelcomScreen = ({navigation}) => {
   soundEffectsUtil.backgroundSoundEffect();
 
   return (
-    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <ImageBackground
           source={images.welcome_background}
@@ -29,7 +29,10 @@ const WelcomScreen = ({navigation}) => {
           <View style={{marginLeft: 125, marginRight: 125}}>
             <SuccessButton
               title="Continue"
-              customClick={() => {navigation.navigate('HomeScreen'),soundEffectsUtil.touchableButtonSound()}}
+              customClick={() => {
+                navigation.navigate('HomeScreen'),
+                  soundEffectsUtil.touchableButtonSound();
+              }}
             />
           </View>
         </ImageBackground>
@@ -45,14 +48,15 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
   Logo: {
     height: 150,
     width: 150,
     resizeMode: 'contain',
     alignSelf: 'center',
-    marginBottom: 100,
+    marginBottom: 170,
+    marginTop: 60,
     borderRadius: 20,
   },
   text: {

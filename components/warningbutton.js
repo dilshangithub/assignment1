@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   gradient: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: '#b34700',
     height: 60,
