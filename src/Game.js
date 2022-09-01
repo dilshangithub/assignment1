@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   accelerometer,
   setUpdateIntervalForType,
@@ -49,6 +50,7 @@ export default class Game extends Component {
     score: 0, // the current player score
     isVisiblePopup: false,
     message: '',
+    topScore: 0,
   };
 
   constructor(props) {
@@ -87,6 +89,8 @@ export default class Game extends Component {
   }
 
   componentDidMount() {
+    //Fetch top score from
+    this.fetchTopScore();
     // initialize car position
     Matter.Body.setPosition(car, {
       x: DEVICE_WIDTH / 2,
@@ -133,7 +137,7 @@ export default class Game extends Component {
   // last: add componentWillUnmount
   componentWillUnmount() {
     if (this.accelerometer) {
-      // this.accelerometer.stop();
+      this.accelerometer.remove();
     }
   }
 
@@ -245,6 +249,12 @@ export default class Game extends Component {
   //Game over
   gameOver = msg => {
     soundEffectsUtil.crashedSound();
+
+    if (this.state.topScore < this.state.score) {
+      this.saveTopScore();
+      console.log('saved top score');
+    }
+
     this.state.message = msg;
     this.state.isVisiblePopup = true;
     this.opposing_cars.forEach(item => {
@@ -283,6 +293,7 @@ export default class Game extends Component {
 
   // next: add resetGame()
   resetGame = () => {
+    this.fetchTopScore();
     this.setState({
       isGamePaused: false,
     });
@@ -304,8 +315,22 @@ export default class Game extends Component {
     });
   };
 
+  saveTopScore = () => {
+    if (this.state.score > 0) {
+      AsyncStorage.setItem('top_score', this.state.score.toString());
+      console.log('Saved top score');
+    }
+  };
+
+  fetchTopScore = () => {
+    AsyncStorage.getItem('top_score').then(tScore => {
+      this.state.topScore = tScore;
+      console.log('Fetched item');
+    });
+  };
+
   render() {
-    const {isGameSetup, score} = this.state;
+    const {isGameSetup, score, topScore} = this.state;
 
     if (isGameSetup) {
       return (
@@ -316,6 +341,9 @@ export default class Game extends Component {
           <View style={styles.infoWrapper}>
             <View style={styles.scoreContainer}>
               <Text style={styles.scoreText}>Score: {score}</Text>
+            </View>
+            <View style={styles.topScoreContainer}>
+              <Text style={styles.scoreText}>Top Score: {topScore}</Text>
             </View>
           </View>
 
@@ -446,5 +474,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  topScoreContainer: {
+    position: 'absolute',
+    top: 50,
+    marginLeft: 50,
+    // right: 50,
   },
 });
