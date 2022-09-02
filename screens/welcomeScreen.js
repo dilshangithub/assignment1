@@ -8,14 +8,40 @@ import {
   Text,
   SafeAreaView,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import SuccessButton from '../components/successbutton';
 import images from '../components/images';
 import soundEffectsUtil from '../utils/soundEffectsUtil';
+import {EASY_PROFILE} from '../components/game/Constants';
 
 KeepAwake.activate();
 
 const WelcomScreen = ({navigation}) => {
   soundEffectsUtil.backgroundSoundEffect();
+
+  const saveGameProfile = async () => {
+    let value = await AsyncStorage.getItem('game_profile');
+    if(value != null){
+      console.log(value);
+    }
+    else{
+      AsyncStorage.setItem('game_profile', EASY_PROFILE.toString());
+      console.log('Set default value');
+    }
+
+    // AsyncStorage.getItem('profile').then(val => {
+    //   console.log(val);
+    // });
+    // AsyncStorage.setItem('profile', '0.5');
+    // console.log('Set default profile');
+  };
+  
+  // const fetchgameProfile = () => {
+  //   AsyncStorage.getItem('profile').then(val => {
+  //     console.log(val);
+  //   });
+  // };
+
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -31,6 +57,8 @@ const WelcomScreen = ({navigation}) => {
               title="Continue"
               customClick={() => {
                 navigation.navigate('HomeScreen'),
+                saveGameProfile(),
+                // fetchgameProfile(),
                   soundEffectsUtil.touchableButtonSound();
               }}
             />

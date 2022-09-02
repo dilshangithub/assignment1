@@ -8,22 +8,7 @@ function touchableButtonSound() {
       console.log('failed to load the sound', error);
       return;
     }
-    // loaded successfully
-    console.log(
-      'duration in seconds: ' +
-      btnSound.getDuration() +
-        'number of channels: ' +
-        btnSound.getNumberOfChannels(),
-    );
-
-    // Play the sound with an onEnd callback
-    btnSound.play(success => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
-      }
-    });
+    btnSound.play();
   });
 }
 
@@ -31,29 +16,14 @@ function backgroundSoundEffect() {
   Sound.setCategory('Playback');
 
   var backgroundSound = new Sound('landing_audio.mp3', Sound.MAIN_BUNDLE, error => {
-    backgroundSound.setVolume(0.1);
+    backgroundSound.setVolume(0.4);
 
     if (error) {
       console.log('failed to load the sound', error);
       return;
     }
-    // loaded successfully
-    console.log(
-      'duration in seconds: ' +
-      backgroundSound.getDuration() +
-        'number of channels: ' +
-        backgroundSound.getNumberOfChannels(),
-    );
-
-    // Play the sound with an onEnd callback
     backgroundSound.setNumberOfLoops(-1);
-    backgroundSound.play(success => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
-      }
-    });
+    backgroundSound.play();
   });
 }
 
@@ -65,22 +35,7 @@ function crashedSound() {
       console.log('failed to load the sound', error);
       return;
     }
-    // loaded successfully
-    console.log(
-      'duration in seconds: ' +
-      crashed.getDuration() +
-        'number of channels: ' +
-        crashed.getNumberOfChannels(),
-    );
-
-    // Play the sound with an onEnd callback
-    crashed.play(success => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
-      }
-    });
+    crashed.play();
   });
 }
 

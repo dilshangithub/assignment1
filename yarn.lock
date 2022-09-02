@@ -3451,6 +3451,11 @@
   "resolved" "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
   "version" "0.2.0"
 
+"dedent-js@^1.0.1":
+  "integrity" "sha512-OUepMozQULMLUmhxS95Vudo0jb0UchLimi3+pQ2plj61Fcy8axbP9hbiD4Sz6DPqn6XG3kfmziVfQ1rSys5AJQ=="
+  "resolved" "https://registry.npmjs.org/dedent-js/-/dedent-js-1.0.1.tgz"
+  "version" "1.0.1"
+
 "deep-extend@^0.6.0":
   "integrity" "sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA=="
   "resolved" "https://registry.npmjs.org/deep-extend/-/deep-extend-0.6.0.tgz"
@@ -6426,6 +6431,13 @@
     "metro-source-map" "0.70.3"
     "metro-transform-plugins" "0.70.3"
     "nullthrows" "^1.1.1"
+
+"metro-with-symlinks@^1.4.0":
+  "integrity" "sha512-OgO7+On+GADaTlHVBPeZHEGaJeOK776DpLVT90Tq5b9LeGANPJPdVQTj73tY1Jce3c9g0HRz6Rvjpg95cVHDzw=="
+  "resolved" "https://registry.npmjs.org/metro-with-symlinks/-/metro-with-symlinks-1.4.0.tgz"
+  "version" "1.4.0"
+  dependencies:
+    "dedent-js" "^1.0.1"
 
 "metro@^0.70.1", "metro@0.70.3":
   "integrity" "sha512-uEWS7xg8oTetQDABYNtsyeUjdLhH3KAvLFpaFFoJqUpOk2A3iygszdqmjobFl6W4zrvKDJS+XxdMR1roYvUhTw=="

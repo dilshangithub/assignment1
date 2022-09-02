@@ -62,10 +62,33 @@ function validateSignupForm(email, password, firstName, lastName) {
     return null;
   }
 
+  function validateResetPasswordForm(currentPassword, newPassword,reEnterPassword) {
+    let error = {};
+
+    if (currentPassword.trim().length === 0) {
+      error = {...error, currentPasswordError: "Please enter your current password"};
+    }
+    
+    if (newPassword.trim().length === 0) {
+      error = {...error, newPasswordError: "Please enter your nuw password"};
+    }
+
+    if (reEnterPassword.trim().length === 0) {
+      error = {...error, reEnterPasswordError: "Please re-enter your new password"};
+    }
+
+    if (Object.keys(error).length > 0) {
+      return error;
+    }
+    return null;
+  }
+
+
 const textInputValidateUtil = {
   validateLoginForm,
   validateSignupForm,
-  validateForgotPasswordForm
+  validateForgotPasswordForm,
+  validateResetPasswordForm
 };
 
 export default textInputValidateUtil;
