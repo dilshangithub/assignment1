@@ -11,6 +11,15 @@ const settings = require('../assets/icons/settings.png')
 const share = require('../assets/icons/share.png')
 const menu_icon = require('../assets/icons/menu_icon.png')
 const close = require('../assets/icons/close.png')
+const logout = require('../assets/icons/logout.png')
+const profiles = require('../assets/icons/games.png')
+const account = require('../assets/icons/user.png')
+const forward = require('../assets/icons/forward.png')
+const scoreboard = require('../assets/icons/scoreboard.png')
+const medal_1 = require('../assets/icons/medal_1.png')
+const medal_2 = require('../assets/icons/medal_2.png')
+const medal_3 = require('../assets/icons/medal_3.png')
+
 
 
 export default {
@@ -24,5 +33,13 @@ export default {
   settings,
   share,
   menu_icon,
-  close
+  close,
+  logout,
+  profiles,
+  account,
+  forward,
+  scoreboard,
+  medal_1,
+  medal_2,
+  medal_3
 };

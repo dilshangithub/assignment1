@@ -7,16 +7,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import KeepAwake from 'react-native-keep-awake';
 
-import WelcomScreen from './screens/welcomeScreen';
-import HomeScreen from './screens/homeScreen';
-import GameScreen from './screens/gameScreen';
-import LoginScreen from './screens/loginScreen';
-import SignupScreen from './screens/signupScreen';
-import ForgotPasswordScreen from './screens/forgotpasswordScreen';
+import WelcomScreen from './screens/Home/welcomeScreen';
+import HomeScreen from './screens/Home/homeScreen';
+import GameScreen from './screens/Game/gameScreen';
+import LoginScreen from './screens/Auth/loginScreen';
+import SignupScreen from './screens/Auth/signupScreen';
+import ForgotPasswordScreen from './screens/Auth/forgotpasswordScreen';
 
 const Stack = createStackNavigator();
 
 KeepAwake.activate();
+
 const App = () => {
   return (
     <NavigationContainer>
@@ -24,7 +25,6 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        // initialRouteName={'SignupScreen'}
       >
         <Stack.Screen
           name="WelcomScreen"

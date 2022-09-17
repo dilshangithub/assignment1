@@ -1,5 +1,4 @@
 import {Dimensions} from 'react-native';
-const {width, height} = Dimensions.get('window');
 
 export const FONTS = {
   KidsEdition: {fontFamily: 'Kids Edition', lineHeight: 36},
@@ -15,7 +14,7 @@ export const FONTS = {
   header1: {
     fontFamily: 'Dr.Stronge',
     textAlign: 'center',
-    fontSize: 40,
+    fontSize: 45,
     letterSpacing: 1,
   },
   header2: {
@@ -29,6 +28,4 @@ export const FONTS = {
     fontSize: 18,
     letterSpacing: 1,
   },
-  // body4: { fontFamily: "Dr.Stronge", lineHeight: 22 },
-  // body5: { fontFamily: "Dr.Stronge", lineHeight: 22 },
 };
