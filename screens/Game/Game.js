@@ -36,8 +36,8 @@ import {car, floor, road} from '../../components/game/Objects';
 import soundEffectsUtil from '../../utils/soundEffectsUtil';
 import icons from '../../components/icons';
 import {FONTS} from '../../components/theme';
-import SuccessButton from '../../components/successbutton';
-import WarningButton from '../../components/warningbutton';
+import SuccessButton from '../../components/buttons/successbutton';
+import WarningButton from '../../components/buttons/warningbutton';
 
 setUpdateIntervalForType(SensorTypes.accelerometer, 15);
 
@@ -196,7 +196,7 @@ export default class Game extends Component {
       playerCar: {
         body: car,
         size: [CAR_WIDTH, CAR_WIDTH],
-        image: images.redCar,
+        image: images.taxi,
         renderer: Car,
       },
 

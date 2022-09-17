@@ -15,8 +15,8 @@ const upperNavBar = props => {
         borderBottomWidth: 3,
         marginRight: 20,
         // marginBottom: 20,
-        backgroundColor: '#d6d6c2',
-        borderColor: '#c2c2a3',
+        backgroundColor: '#87bd83',
+        borderColor: '#f4f7c8',
       }}>
       {/* Back */}
       <TouchableOpacity
@@ -40,7 +40,7 @@ const upperNavBar = props => {
             marginTop: 5,
             height: 30,
             width: 30,
-            tintColor: '#7a7a52',
+            tintColor: '#977746',
           }}
         />
       </TouchableOpacity>
@@ -60,7 +60,7 @@ const upperNavBar = props => {
               marginTop: 5,
               height: 30,
               width: 30,
-              tintColor: '#7a7a52',
+              tintColor: '#977746',
             }}
           />
         </TouchableOpacity>
@@ -68,7 +68,7 @@ const upperNavBar = props => {
       {/* Logo */}
       <View style={{position: 'absolute', marginLeft: '45%'}}>
         <Image
-          source={images.logo}
+          source={images.carLogo}
           style={{
             marginTop: 5,
             height: 50,

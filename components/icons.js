@@ -15,6 +15,10 @@ const logout = require('../assets/icons/logout.png')
 const profiles = require('../assets/icons/games.png')
 const account = require('../assets/icons/user.png')
 const forward = require('../assets/icons/forward.png')
+const scoreboard = require('../assets/icons/scoreboard.png')
+const medal_1 = require('../assets/icons/medal_1.png')
+const medal_2 = require('../assets/icons/medal_2.png')
+const medal_3 = require('../assets/icons/medal_3.png')
 
 
 
@@ -33,5 +37,9 @@ export default {
   logout,
   profiles,
   account,
-  forward
+  forward,
+  scoreboard,
+  medal_1,
+  medal_2,
+  medal_3
 };

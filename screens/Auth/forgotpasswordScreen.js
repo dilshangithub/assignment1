@@ -11,8 +11,8 @@ import {
 import KeepAwake from 'react-native-keep-awake';
 import LinearGradient from 'react-native-linear-gradient';
 
-import SuccessButton from '../../components/successbutton';
-import UrlButton from '../../components/urlbutton';
+import SuccessButton from '../../components/buttons/successbutton';
+import UrlButton from '../../components/buttons/urlbutton';
 import {FONTS} from '../../components/theme';
 import icons from '../../components/icons';
 import images from '../../components/images';
@@ -42,7 +42,7 @@ const ForgotPasswordScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, backgroundColor: '#ebebe0'}}>
+      <View style={{flex: 1, backgroundColor: '#ddedea'}}>
         <UpperNavBar navigation={navigation} />
 
         <View style={{flex: 1}}>

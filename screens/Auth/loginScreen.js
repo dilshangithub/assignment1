@@ -14,8 +14,8 @@ import {
 import KeepAwake from 'react-native-keep-awake';
 import LinearGradient from 'react-native-linear-gradient';
 
-import SuccessButton from '../../components/successbutton';
-import UrlButton from '../../components/urlbutton';
+import SuccessButton from '../../components/buttons/successbutton';
+import UrlButton from '../../components/buttons/urlbutton';
 import {FONTS} from '../../components/theme';
 import icons from '../../components/icons';
 import UpperNavBar from '../../components/upperNavBar';
@@ -50,7 +50,7 @@ const LoginScreen = ({navigation}) => {
   function renderLoginView() {
     return (
       <SafeAreaView style={{flex: 1}}>
-        <View style={{flex: 1, backgroundColor: '#ebebe0'}}>
+        <View style={{flex: 1, backgroundColor: '#ddedea'}}>
           {/* Body */}
           <View style={{flex: 1}}>
             <Text style={{...FONTS.header1, marginTop: 25, color: '#ff6600'}}>
@@ -140,7 +140,7 @@ const LoginScreen = ({navigation}) => {
 
       <UpperNavBar navigation={navigation}/>
 
-      <LinearGradient colors={['#ebebe0', '#ebebe0']} style={{flex: 1}}>
+      <LinearGradient colors={['#ddedea', '#ddedea']} style={{flex: 1}}>
         <ScrollView>{renderLoginView()}</ScrollView>
       </LinearGradient>
     </KeyboardAvoidingView>

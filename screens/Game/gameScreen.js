@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SuccessButton from '../../components/successbutton';
+import SuccessButton from '../../components/buttons/successbutton';
 import Game from './Game';
 
 

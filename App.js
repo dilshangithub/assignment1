@@ -7,8 +7,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import KeepAwake from 'react-native-keep-awake';
 
-import WelcomScreen from './screens/welcomeScreen';
-import HomeScreen from './screens/Auth/homeScreen';
+import WelcomScreen from './screens/Home/welcomeScreen';
+import HomeScreen from './screens/Home/homeScreen';
 import GameScreen from './screens/Game/gameScreen';
 import LoginScreen from './screens/Auth/loginScreen';
 import SignupScreen from './screens/Auth/signupScreen';
@@ -25,7 +25,6 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        // initialRouteName={'SignupScreen'}
       >
         <Stack.Screen
           name="WelcomScreen"
