@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   SafeAreaView,
+  BackHandler,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SuccessButton from '../../components/buttons/successbutton';
@@ -14,13 +15,26 @@ import images from '../../components/images';
 import soundEffectsUtil from '../../utils/soundEffectsUtil';
 import {EASY_PROFILE} from '../../components/game/Constants';
 
-
 KeepAwake.activate();
 
 const WelcomScreen = ({navigation}) => {
   soundEffectsUtil.backgroundSoundEffect();
+  soundEffectsUtil.startPlaying();
 
+  function handleBackButtonClick() {
+    soundEffectsUtil.stopPlaying();
+    BackHandler.exitApp();
+  }
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
 
   const saveGameProfile = async () => {
     let value = await AsyncStorage.getItem('game_profile');
@@ -53,10 +67,9 @@ const WelcomScreen = ({navigation}) => {
           style={styles.image}>
           <Image source={images.logo} style={styles.Logo} />
 
-
           <Image source={images.carLogo} style={styles.carLogo} />
 
-          <View style={{marginLeft: 125, marginRight: 125}}>
+          <View style={{marginLeft: 100, marginRight: 100}}>
             <SuccessButton
               title="Continue"
               customClick={() => {
@@ -92,12 +105,12 @@ const styles = StyleSheet.create({
   },
 
   carLogo: {
-    height: 300,
+    height: 200,
     // width: '90%',
     resizeMode: 'contain',
     alignSelf: 'center',
-    marginTop: -350,
-    marginBottom:50
+    marginTop: -330,
+    marginBottom: 100,
     // flex: 1,
   },
   text: {

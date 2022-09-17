@@ -44,10 +44,8 @@ const HomeScreen = ({navigation}) => {
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [isAccountVisible, setIsAccountVisible] = useState(false);
   const [isLogoutScreenVisible, setIsLogoutScreenVisible] = useState(false);
-  const [isChangePasswordScreenVisible, setIsChangePasswordScreenVisible] =
-    useState(false);
-  const [isUpdateInfoScreenVisible, setIsUpdateInfoScreenVisible] =
-    useState(false);
+  const [isChangePasswordScreenVisible, setIsChangePasswordScreenVisible] = useState(false);
+  const [isUpdateInfoScreenVisible, setIsUpdateInfoScreenVisible] = useState(false);
   const [isScoreBoardVisible, setIsScoreBoardVisible] = useState(false);
   const [isEasy, isSetEasy] = useState(false);
   const [isMedium, isSetMedium] = useState(false);
@@ -72,6 +70,11 @@ const HomeScreen = ({navigation}) => {
   const [lastName, setLastName] = React.useState('');
 
   const pauseAudio = () => {
+    if (isMute) {
+      soundEffectsUtil.stopPlaying();
+    } else {
+      soundEffectsUtil.startPlaying();
+    }
     setIsMute(!isMute);
   };
 
@@ -84,7 +87,8 @@ const HomeScreen = ({navigation}) => {
     navigation.navigate('WelcomScreen');
   };
 
-  const findScores = () => {  // fetch top scores for community as well
+  const findScores = () => {
+    // fetch top scores for community as well
     AsyncStorage.getItem('top_score').then(tScore => {
       setTopScore(tScore);
       console.log('Fetched item');
@@ -798,13 +802,14 @@ const HomeScreen = ({navigation}) => {
               <Text style={{...FONTS.header1, marginTop: 20}}>About game</Text>
               <Text style={{marginTop: 10, textAlign: 'center'}}>
                 A game is a structured form of play, usually undertaken for
-                entertainment or fun. This Taxi driver is a fun game that you can play in your fun times. You can see your community places as well. We will provide more updates.
+                entertainment or fun. This Taxi driver is a fun game that you
+                can play in your fun times. You can see your community places as
+                well. We will provide more updates.
               </Text>
 
               <Text style={{marginTop: 10, textAlign: 'center'}}>
                 Version: 1.0
               </Text>
-
             </View>
           </View>
         </Modal>
@@ -1262,7 +1267,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     marginTop: -250,
-    marginBottom:40
+    marginBottom: 40,
     // flex: 1,
   },
 

@@ -20,7 +20,7 @@ import {FONTS} from '../../components/theme';
 import icons from '../../components/icons';
 import UpperNavBar from '../../components/upperNavBar';
 import textInputValidateUtil from '../../utils/textInputValidateUtil';
-import soundEffectsUtil from '../../utils/soundEffectsUtil'
+import soundEffectsUtil from '../../utils/soundEffectsUtil';
 
 KeepAwake.activate();
 
@@ -32,7 +32,6 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [showPassword, setshowPassword] = useState(false);
-
 
   const loginMe = () => {
     const error = textInputValidateUtil.validateLoginForm(email, password);
@@ -59,7 +58,10 @@ const LoginScreen = ({navigation}) => {
             <View style={{marginTop: 15}}>
               <UrlButton
                 title="Don't have an account? Sign up"
-                customClick={() => {navigation.navigate('SignupScreen'), soundEffectsUtil.touchableButtonSound()}}
+                customClick={() => {
+                  navigation.navigate('SignupScreen'),
+                    soundEffectsUtil.touchableButtonSound();
+                }}
               />
             </View>
 
@@ -73,9 +75,9 @@ const LoginScreen = ({navigation}) => {
                   onChangeText={value => setEmail(value)}
                 />
               </View>
-              <View style={{marginTop:-20, marginBottom:20, marginLeft:20}}>
+              <View style={{marginTop: -20, marginBottom: 20, marginLeft: 20}}>
                 {Boolean(errorFlag.emailError) && (
-                  <Text style={{color:'red'}}>{errorFlag.emailError}</Text>
+                  <Text style={{color: 'red'}}>{errorFlag.emailError}</Text>
                 )}
               </View>
 
@@ -107,25 +109,29 @@ const LoginScreen = ({navigation}) => {
                 </TouchableOpacity>
               </View>
 
-              <View style={{marginTop:-20, marginBottom:20, marginLeft:20}}>
+              <View style={{marginTop: -20, marginBottom: 20, marginLeft: 20}}>
                 {Boolean(errorFlag.passwordError) && (
-                  <Text style={{color:'red'}}>{errorFlag.passwordError}</Text>
+                  <Text style={{color: 'red'}}>{errorFlag.passwordError}</Text>
                 )}
               </View>
-
 
               <View style={{marginTop: 15}}>
                 <UrlButton
                   title="Forgot Password?"
-                  customClick={() =>{
+                  customClick={() => {
                     navigation.navigate('ForgotPasswordScreen'),
-                    soundEffectsUtil.touchableButtonSound()
+                      soundEffectsUtil.touchableButtonSound();
                   }}
                 />
               </View>
 
               <View style={{marginTop: 20}}>
-                <SuccessButton title="LOGIN" customClick={() => {loginMe(),soundEffectsUtil.touchableButtonSound()}} />
+                <SuccessButton
+                  title="LOGIN"
+                  customClick={() => {
+                    loginMe(), soundEffectsUtil.touchableButtonSound();
+                  }}
+                />
               </View>
             </View>
           </View>
@@ -137,8 +143,7 @@ const LoginScreen = ({navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.android === 'android' ? 'padding' : null}
       style={{flex: 1}}>
-
-      <UpperNavBar navigation={navigation}/>
+      <UpperNavBar navigation={navigation} />
 
       <LinearGradient colors={['#ddedea', '#ddedea']} style={{flex: 1}}>
         <ScrollView>{renderLoginView()}</ScrollView>

@@ -24,7 +24,7 @@ import icons from '../../components/icons';
 import UpperNavBar from '../../components/upperNavBar';
 import images from '../../components/images';
 import textInputValidateUtil from '../../utils/textInputValidateUtil';
-import soundEffectsUtil from '../../utils/soundEffectsUtil'
+import soundEffectsUtil from '../../utils/soundEffectsUtil';
 
 KeepAwake.activate();
 
@@ -70,7 +70,10 @@ const SignupScreen = ({navigation}) => {
             <View style={{marginTop: 15}}>
               <UrlButton
                 title="Already have an account? Log in"
-                customClick={() => {navigation.navigate('LoginScreen'),soundEffectsUtil.touchableButtonSound()}}
+                customClick={() => {
+                  navigation.navigate('LoginScreen'),
+                    soundEffectsUtil.touchableButtonSound();
+                }}
               />
             </View>
 
@@ -179,7 +182,12 @@ const SignupScreen = ({navigation}) => {
               </View>
 
               <View style={{marginTop: 20}}>
-                <SuccessButton title="Sign Up" customClick={() => {signupMe(), soundEffectsUtil.touchableButtonSound()}} />
+                <SuccessButton
+                  title="Sign Up"
+                  customClick={() => {
+                    signupMe(), soundEffectsUtil.touchableButtonSound();
+                  }}
+                />
               </View>
             </View>
           </View>

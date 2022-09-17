@@ -405,6 +405,7 @@ export default class Game extends Component {
                       customClick={() => {
                         this.accelerometer.unsubscribe(),
                           soundEffectsUtil.touchableButtonSound(),
+                          soundEffectsUtil.stopPlaying(),
                           BackHandler.exitApp(),
                           (this.state.isVisiblePopup = false);
                       }}
