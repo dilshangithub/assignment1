@@ -1,4 +1,4 @@
-package com.assignment1.newarchitecture.modules;
+package com.taxidriver.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

@@ -64,7 +64,7 @@ const App = () => {
           component={HomeScreen}
           options={{
             title: '',
-            headerStyle: {
+            headerStyle: { 
               backgroundColor: '#f4511e',
             },
             headerTintColor: '#fff',

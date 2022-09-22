@@ -1,4 +1,4 @@
-package com.assignment1.newarchitecture;
+package com.taxidriver.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.assignment1.BuildConfig;
-import com.assignment1.newarchitecture.components.MainComponentsRegistry;
-import com.assignment1.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.taxidriver.BuildConfig;
+import com.taxidriver.newarchitecture.components.MainComponentsRegistry;
+import com.taxidriver.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

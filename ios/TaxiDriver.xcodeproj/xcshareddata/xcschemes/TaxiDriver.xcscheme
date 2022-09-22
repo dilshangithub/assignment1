@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Game.app"
-               BlueprintName = "Game"
-               ReferencedContainer = "container:Game.xcodeproj">
+               BuildableName = "TaxiDriver.app"
+               BlueprintName = "TaxiDriver"
+               ReferencedContainer = "container:TaxiDriver.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "GameTests.xctest"
-               BlueprintName = "GameTests"
-               ReferencedContainer = "container:Game.xcodeproj">
+               BuildableName = "TaxiDriverTests.xctest"
+               BlueprintName = "TaxiDriverTests"
+               ReferencedContainer = "container:TaxiDriver.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Game.app"
-            BlueprintName = "Game"
-            ReferencedContainer = "container:Game.xcodeproj">
+            BuildableName = "TaxiDriver.app"
+            BlueprintName = "TaxiDriver"
+            ReferencedContainer = "container:TaxiDriver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Game.app"
-            BlueprintName = "Game"
-            ReferencedContainer = "container:Game.xcodeproj">
+            BuildableName = "TaxiDriver.app"
+            BlueprintName = "TaxiDriver"
+            ReferencedContainer = "container:TaxiDriver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

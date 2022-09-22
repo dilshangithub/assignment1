@@ -1,4 +1,4 @@
-package com.assignment1;
+package com.taxidriver;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "Game";
+    return "TaxiDriver";
   }
 
   /**
