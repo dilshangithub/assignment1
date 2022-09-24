@@ -89,6 +89,12 @@ function validateResetPasswordForm(
       reEnterPasswordError: 'Please re-enter your new password',
     };
   }
+  if(newPassword.trim() != reEnterPassword.trim()){
+    error = {
+      ...error,
+      reEnterPasswordError: 'Passwords are not match.',
+    };
+  }
 
   if (Object.keys(error).length > 0) {
     return error;
@@ -114,7 +120,7 @@ function validateUpdateInfoForm(email, firstName, lastName) {
   }
 
   if (Object.keys(error).length > 0) {
-    return error;
+    return null;
   }
   return null;
 }

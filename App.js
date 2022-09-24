@@ -62,6 +62,7 @@ const App = () => {
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
+          initialParams={{loginBtnVisible: false}}
           options={{
             title: '',
             headerStyle: { 

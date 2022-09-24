@@ -29,6 +29,7 @@ import soundEffectsUtil from '../../utils/soundEffectsUtil';
 import {FONTS} from '../../components/theme';
 import images from '../../components/images';
 import textInputValidateUtil from '../../utils/textInputValidateUtil';
+import firebaseAuthUtil from '../../utils/firebaseAuthUtil';
 import {
   EASY_PROFILE,
   MEDIUM_PROFILE,
@@ -38,6 +39,7 @@ import {
 KeepAwake.activate();
 
 const HomeScreen = ({navigation}) => {
+
   const [isMute, setIsMute] = useState(true);
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [isShareVisible, setIsShareVisible] = useState(false);
@@ -51,23 +53,34 @@ const HomeScreen = ({navigation}) => {
   const [isMedium, isSetMedium] = useState(false);
   const [isHard, isSetHard] = useState(false);
   const [isLoginUser, isSetLoginUser] = useState(false); // need to implement: False
-  const [topScore, setTopScore] = React.useState(0);
+  const [topScore, setTopScore] = useState(0);
 
-  const [resetPerrorFlag, setresetPerrorFlag] = React.useState({});
-  const [updateInfoErrorFlag, setupdateInfoErrorFlag] = React.useState({});
+  const [resetPerrorFlag, setresetPerrorFlag] = useState({});
+  const [updateInfoErrorFlag, setupdateInfoErrorFlag] = useState({});
 
-  const [currentPassword, setcurrentPassword] = React.useState('');
+  const [currentPassword, setcurrentPassword] = useState('');
   const [showCurrentPassword, setshowCurrentPassword] = useState(false);
 
-  const [newPassword, setNewPassword] = React.useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setshowNewPassword] = useState(false);
 
-  const [reEnterPassword, setReEnrterPassword] = React.useState('');
+  const [reEnterPassword, setReEnrterPassword] = useState('');
   const [showreEnterPassword, setshowreEnterPassword] = useState(false);
 
-  const [email, setEmail] = React.useState('');
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  // const [userFirstName, setUserFirstName] = React.useState('');
+  // const [userEmail, setUserEmail] = React.useState('');
+
+  const [updateFname, setupdateFname] = useState('');
+  const [updateLname, setupdateLname] = useState('');
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    loadUserDataFromAsyncStorage();
+  },[]);
 
   const pauseAudio = () => {
     if (isMute) {
@@ -78,9 +91,48 @@ const HomeScreen = ({navigation}) => {
     setIsMute(!isMute);
   };
 
-  const logoutMe = () => {
-    //Logout logic
-    //.....
+  const loadUserDataFromAsyncStorage = async()=>{
+    AsyncStorage.getItem('is_signin_user').then(getUser => {
+      if (getUser != null) {
+        isSetLoginUser(true);
+      }
+    });
+
+    AsyncStorage.getItem('signin_user_email').then(email => {
+      if (email != null) {
+        setEmail(email);
+      }
+    });
+
+    AsyncStorage.getItem('signin_user_firstname').then(fname => {
+      if (fname != null) {
+        setFirstName(fname);
+        setupdateFname(fname);
+      }
+    });
+
+    AsyncStorage.getItem('signin_user_lastname').then(lname => {
+      if (lname != null) {
+        setLastName(lname);
+        setupdateLname(lname);
+      }
+    });
+
+    AsyncStorage.getItem('is_signin_user').then(userId => {
+      if (userId != null) {
+        setUserId(userId);
+      }
+    });
+  }
+
+  const logoutMe = async () => {
+    firebaseAuthUtil.signout();
+
+    await AsyncStorage.removeItem('signin_user_firstname');
+    await AsyncStorage.removeItem('signin_user_lastname');
+    await AsyncStorage.removeItem('top_score');
+    await AsyncStorage.removeItem('signin_user_email');
+    await AsyncStorage.removeItem('is_signin_user');
 
     setIsAccountVisible(false);
     setIsLogoutScreenVisible(false);
@@ -95,7 +147,7 @@ const HomeScreen = ({navigation}) => {
     });
   };
 
-  const changeMypassword = () => {
+  const changeMypassword = async () => {
     const error = textInputValidateUtil.validateResetPasswordForm(
       currentPassword,
       newPassword,
@@ -106,11 +158,15 @@ const HomeScreen = ({navigation}) => {
       return;
     }
     setresetPerrorFlag({});
-    // logic
+
+    setIsChangePasswordScreenVisible(!await firebaseAuthUtil.changeUserPassword(
+      currentPassword,
+      newPassword,
+    ));
     console.log('chnage password');
   };
 
-  const updateMyInformation = () => {
+  const updateMyInformation = async () => {
     const error = textInputValidateUtil.validateUpdateInfoForm(
       email,
       firstName,
@@ -122,7 +178,15 @@ const HomeScreen = ({navigation}) => {
       return;
     }
     setupdateInfoErrorFlag({});
-    // logic
+
+    await firebaseAuthUtil.updateUserData(
+      userId,
+      email,
+      updateFname,
+      updateLname,
+    );
+    setIsUpdateInfoScreenVisible(false);
+
     console.log('updated info');
   };
 
@@ -291,9 +355,10 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Email"
+              placeholder={email}
               placeholderTextColor="#c2c2a3"
               onChangeText={value => setEmail(value)}
+              editable={false}
             />
           </View>
 
@@ -308,9 +373,9 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="First Name"
+              placeholder={firstName}
               placeholderTextColor="#c2c2a3"
-              onChangeText={value => setFirstName(value)}
+              onChangeText={value => setupdateFname(value)}
             />
           </View>
 
@@ -325,9 +390,9 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Last Name"
+              placeholder={lastName}
               placeholderTextColor="#c2c2a3"
-              onChangeText={value => setLastName(value)}
+              onChangeText={value => setupdateLname(value)}
             />
           </View>
 
@@ -637,20 +702,23 @@ const HomeScreen = ({navigation}) => {
                 />
               </TouchableOpacity>
 
-              <Text style={{...FONTS.header2}}>Top Score</Text>
+              <Text style={{...FONTS.header2}}>Your Top Score</Text>
               <Text
                 style={{
                   // ...FONTS.header3,
                   fontSize: 25,
-                  marginTop: 30,
+                  marginTop: 5,
+                  marginBottom:20,
                   textAlign: 'center',
                   color: 'red',
+                  fontWeight:'bold',
                 }}>
                 {topScore}
               </Text>
               {isLoginUser ? (
                 <View>
                   <Text style={{...FONTS.header2}}>Community</Text>
+                  <Text style={{...FONTS.header2, fontSize:15}}>Top three players in the world!</Text>
 
                   {/* 1st */}
                   <View
@@ -1034,7 +1102,7 @@ const HomeScreen = ({navigation}) => {
                   marginTop: 30,
                   textAlign: 'center',
                 }}>
-                Dilshan
+                {firstName}
               </Text>
               <Text
                 style={{
@@ -1043,7 +1111,7 @@ const HomeScreen = ({navigation}) => {
                   marginTop: 10,
                   textAlign: 'center',
                 }}>
-                uggdilshan.gmail.com
+                {email}
               </Text>
               <View style={{marginTop: 20, marginLeft: 70, marginRight: 70}}>
                 <WarningButton

@@ -38,6 +38,7 @@ import icons from '../../components/icons';
 import {FONTS} from '../../components/theme';
 import SuccessButton from '../../components/buttons/successbutton';
 import WarningButton from '../../components/buttons/warningbutton';
+import firebaseAuthUtil from '../../utils/firebaseAuthUtil';
 
 setUpdateIntervalForType(SensorTypes.accelerometer, 15);
 
@@ -300,6 +301,13 @@ export default class Game extends Component {
   saveTopScore = () => {
     if (this.state.score > 0) {
       AsyncStorage.setItem('top_score', this.state.score.toString());
+      //upload topsocre into cloud
+
+      AsyncStorage.getItem('is_signin_user').then(userId => {
+        if (userId != null) {
+          firebaseAuthUtil.updateTopScore(userId, this.state.score);
+        }
+      });
       console.log('Saved top score');
     }
   };

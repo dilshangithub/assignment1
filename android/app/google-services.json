@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "680036174468",
+    "project_id": "taxidriver-4c824",
+    "storage_bucket": "taxidriver-4c824.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680036174468:android:77aaadcab47dc8b9ee10d1",
+        "android_client_info": {
+          "package_name": "com.taxidriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680036174468-cnkestr3jlv0fsga881ff7kthof266dh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBDS4LUmOO6hch03le7WrUH64JxygR6Pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680036174468-cnkestr3jlv0fsga881ff7kthof266dh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
