@@ -144,25 +144,12 @@ const HomeScreen = ({navigation}) => {
   };
 
   const logoutMe = async () => {
-    firebaseAuthUtil.signout();
+    const keys = await AsyncStorage.getAllKeys();
+    await AsyncStorage.multiRemove(keys);
 
-    await AsyncStorage.removeItem('signin_user_firstname');
-    await AsyncStorage.removeItem('signin_user_lastname');
-    await AsyncStorage.removeItem('signin_user_email');
-    await AsyncStorage.removeItem('is_signin_user');
-    await AsyncStorage.removeItem('top_score');
-    await AsyncStorage.removeItem('community_rank_1');
-    await AsyncStorage.removeItem('community_rank_2');
-    await AsyncStorage.removeItem('community_rank_3');
-
-    await AsyncStorage.getItem('is_signin_user').then(userId => {
-      if (userId != null) {
-        setUserId(userId);
-        console.log('Removed' + userId);
-      } else {
-        console.log('Removed');
-      }
-    });
+    const keys2 = await AsyncStorage.getAllKeys();
+    console.log('async keys');
+    console.log(keys2);
 
     setIsAccountVisible(false);
     setIsLogoutScreenVisible(false);

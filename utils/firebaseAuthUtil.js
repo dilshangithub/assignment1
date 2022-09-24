@@ -15,11 +15,8 @@ async function createUser(useremail, password, firstName, lastName) {
       user = userCredential.user;
 
       if (user.uid != null) {
-        AsyncStorage.setItem('signin_user_firstname', firstName);
-        AsyncStorage.setItem('signin_user_lastname', lastName);
-        AsyncStorage.setItem('top_score', topScore.toString());
-        AsyncStorage.setItem('signin_user_email', user.email.toString());
-        AsyncStorage.setItem('is_signin_user', user.uid.toString());
+        console.log('save userdata in async storage');
+        console.log(user);
 
         const userRef = fireStore().doc(`users/${user.uid}`);
         const snapShot = userRef.get();
@@ -44,8 +41,6 @@ async function createUser(useremail, password, firstName, lastName) {
           }
         }
       }
-      //fetch and save relevant fields in async storage
-      fetchAndSaveCommunityRanks();
       return user;
     })
     .catch(error => {
@@ -134,7 +129,9 @@ async function fetchAndSaveCommunityRanks() {
     var sortJsonArray = require('sort-json-array');
     const sortedUserList = sortJsonArray(userObjects, 'topscore', 'des');
 
-    for (let i = 0; i < sortedUserList.length; i++) {
+    console.log(sortedUserList);
+
+    for (let i = 0; i < 3; i++) {
       let place = i + 1;
       AsyncStorage.setItem(
         'community_rank_' + place,

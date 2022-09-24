@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.assignment1",
+  "applicationId": "com.taxidriver",
   "variantName": "release",
   "elements": [
     {

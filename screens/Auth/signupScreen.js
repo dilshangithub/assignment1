@@ -70,7 +70,7 @@ const SignupScreen = ({navigation}) => {
     console.log(user);
     if (user != null) {
       setLoaderVisible(false);
-      navigation.navigate('WelcomScreen');
+      navigation.navigate('LoginScreen');
     } else {
       setLoaderVisible(false);
     }
