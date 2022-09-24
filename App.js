@@ -19,7 +19,6 @@ const Stack = createStackNavigator();
 KeepAwake.activate();
 
 const App = () => {
-
   //handle app states -> background and foground
   useEffect(() => {
     const appStateListener = AppState.addEventListener(
@@ -65,7 +64,7 @@ const App = () => {
           initialParams={{loginBtnVisible: false}}
           options={{
             title: '',
-            headerStyle: { 
+            headerStyle: {
               backgroundColor: '#f4511e',
             },
             headerTintColor: '#fff',

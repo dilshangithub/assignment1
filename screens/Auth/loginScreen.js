@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import LinearGradient from 'react-native-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SuccessButton from '../../components/buttons/successbutton';
 import UrlButton from '../../components/buttons/urlbutton';
@@ -48,22 +47,13 @@ const LoginScreen = ({navigation}) => {
     setLoaderVisible(true);
 
     setUser(await firebaseAuthUtil.loginUser(email, password));
-
-    // if(user !=null){
-    //   await AsyncStorage.setItem('is_signin_user', user.uid.toString());
-    //   setLoaderVisible(false);
-    //   navigation.navigate('HomeScreen');
-    // }
-    // else{
-    //   setLoaderVisible(false);
-    // }
   };
 
   useEffect(() => {
     console.log(user);
     if (user != null) {
       setLoaderVisible(false);
-      navigation.navigate('HomeScreen');
+      navigation.navigate('WelcomScreen');
     } else {
       setLoaderVisible(false);
     }

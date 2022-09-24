@@ -15,6 +15,12 @@ async function createUser(useremail, password, firstName, lastName) {
       user = userCredential.user;
 
       if (user.uid != null) {
+        AsyncStorage.setItem('signin_user_firstname', firstName);
+        AsyncStorage.setItem('signin_user_lastname', lastName);
+        AsyncStorage.setItem('top_score', topScore.toString());
+        AsyncStorage.setItem('signin_user_email', user.email.toString());
+        AsyncStorage.setItem('is_signin_user', user.uid.toString());
+
         const userRef = fireStore().doc(`users/${user.uid}`);
         const snapShot = userRef.get();
 
@@ -38,14 +44,8 @@ async function createUser(useremail, password, firstName, lastName) {
           }
         }
       }
-      console.log('Created User ' + user.email);
-
-      AsyncStorage.setItem('signin_user_firstname', firstName);
-      AsyncStorage.setItem('signin_user_lastname',lastName);
-      AsyncStorage.setItem('top_score', topScore.toString());
-      AsyncStorage.setItem('signin_user_email', user.email.toString());
-      AsyncStorage.setItem('is_signin_user', user.uid.toString());
-      
+      //fetch and save relevant fields in async storage
+      fetchAndSaveCommunityRanks();
       return user;
     })
     .catch(error => {
@@ -87,13 +87,15 @@ async function loginUser(email, password) {
             const {firstname, lastname, topscore, userid} = doc.data();
 
             if (userid === user.uid) {
-              console.log('User Data: '+ firstname);
+              console.log('User Data: ' + firstname);
 
               AsyncStorage.setItem('signin_user_firstname', firstname);
-              AsyncStorage.setItem('signin_user_lastname',lastname);
+              AsyncStorage.setItem('signin_user_lastname', lastname);
               AsyncStorage.setItem('top_score', topscore.toString());
               AsyncStorage.setItem('signin_user_email', user.email.toString());
               AsyncStorage.setItem('is_signin_user', user.uid.toString());
+
+              fetchAndSaveCommunityRanks();
             }
           });
         });
@@ -114,11 +116,48 @@ async function loginUser(email, password) {
   return user;
 }
 
+async function fetchAndSaveCommunityRanks() {
+  //Logic for get all the user data and find ranks
+  const users = await fireStore().collection('users');
+
+  users.onSnapshot(querySnapshot => {
+    const userObjects = [];
+    querySnapshot.forEach(doc => {
+      const {firstname, topscore} = doc.data();
+      userObjects.push({
+        firstname,
+        topscore,
+      });
+    });
+    console.log(userObjects);
+
+    var sortJsonArray = require('sort-json-array');
+    const sortedUserList = sortJsonArray(userObjects, 'topscore', 'des');
+
+    for (let i = 0; i < sortedUserList.length; i++) {
+      let place = i + 1;
+      AsyncStorage.setItem(
+        'community_rank_' + place,
+        sortedUserList[i].firstname + ' - ' + sortedUserList[i].topscore,
+      );
+      console.log(
+        place +
+          ' - ' +
+          sortedUserList[i].firstname +
+          ' - ' +
+          sortedUserList[i].topscore,
+      );
+    }
+  });
+}
+
 async function signout() {
   console.log('Triggered Firebase/Auth/signOut');
   auth()
     .signOut()
-    .then(() => console.log('User sign out.'));
+    .then(() => {
+      console.log('User sign out.');
+    });
 }
 
 async function updateUserData(userId, email, updateFname, updateLname) {
@@ -145,7 +184,7 @@ async function updateTopScore(userId, topScore) {
     .update({
       topscore: topScore,
     })
-    .then();
+    .then(console.log('Top socre saved in cloud, userId, ' + userId));
 }
 
 async function changeUserPassword(curPass, newPass) {
@@ -182,7 +221,7 @@ async function changeUserPassword(curPass, newPass) {
       );
       return false;
     });
-    return true;
+  return true;
 }
 
 const firebaseAuthUtil = {

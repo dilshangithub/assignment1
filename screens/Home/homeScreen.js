@@ -39,20 +39,25 @@ import {
 KeepAwake.activate();
 
 const HomeScreen = ({navigation}) => {
-
   const [isMute, setIsMute] = useState(true);
+
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [isShareVisible, setIsShareVisible] = useState(false);
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [isAccountVisible, setIsAccountVisible] = useState(false);
   const [isLogoutScreenVisible, setIsLogoutScreenVisible] = useState(false);
-  const [isChangePasswordScreenVisible, setIsChangePasswordScreenVisible] = useState(false);
-  const [isUpdateInfoScreenVisible, setIsUpdateInfoScreenVisible] = useState(false);
+  const [isChangePasswordScreenVisible, setIsChangePasswordScreenVisible] =
+    useState(false);
+  const [isUpdateInfoScreenVisible, setIsUpdateInfoScreenVisible] =
+    useState(false);
   const [isScoreBoardVisible, setIsScoreBoardVisible] = useState(false);
+
   const [isEasy, isSetEasy] = useState(false);
   const [isMedium, isSetMedium] = useState(false);
   const [isHard, isSetHard] = useState(false);
-  const [isLoginUser, isSetLoginUser] = useState(false); // need to implement: False
+
+  const [isLoginUser, isSetLoginUser] = useState(false);
+
   const [topScore, setTopScore] = useState(0);
 
   const [resetPerrorFlag, setresetPerrorFlag] = useState({});
@@ -60,10 +65,8 @@ const HomeScreen = ({navigation}) => {
 
   const [currentPassword, setcurrentPassword] = useState('');
   const [showCurrentPassword, setshowCurrentPassword] = useState(false);
-
   const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setshowNewPassword] = useState(false);
-
   const [reEnterPassword, setReEnrterPassword] = useState('');
   const [showreEnterPassword, setshowreEnterPassword] = useState(false);
 
@@ -71,16 +74,26 @@ const HomeScreen = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  // const [userFirstName, setUserFirstName] = React.useState('');
-  // const [userEmail, setUserEmail] = React.useState('');
-
   const [updateFname, setupdateFname] = useState('');
   const [updateLname, setupdateLname] = useState('');
   const [userId, setUserId] = useState('');
 
+  const [c_1stPlace, setC_1stPlace] = useState('');
+  const [c_2ndPlace, setC_2ndPlace] = useState('');
+  const [c_3rdPlace, setC_3rdPlace] = useState('');
+
+  // const focus = useIsFocused();
+
+  // useEffect(() => {
+  //   if(focus == true){
+  //     loadUserDataFromAsyncStorage();
+  //   }
+
+  // },[focus]);
+
   useEffect(() => {
     loadUserDataFromAsyncStorage();
-  },[]);
+  }, []);
 
   const pauseAudio = () => {
     if (isMute) {
@@ -91,60 +104,95 @@ const HomeScreen = ({navigation}) => {
     setIsMute(!isMute);
   };
 
-  const loadUserDataFromAsyncStorage = async()=>{
-    AsyncStorage.getItem('is_signin_user').then(getUser => {
+  const loadUserDataFromAsyncStorage = async () => {
+    await AsyncStorage.getItem('is_signin_user').then(getUser => {
       if (getUser != null) {
         isSetLoginUser(true);
+        console.log(getUser);
       }
     });
 
-    AsyncStorage.getItem('signin_user_email').then(email => {
+    await AsyncStorage.getItem('signin_user_email').then(email => {
       if (email != null) {
         setEmail(email);
+        console.log(email);
       }
     });
 
-    AsyncStorage.getItem('signin_user_firstname').then(fname => {
+    await AsyncStorage.getItem('signin_user_firstname').then(fname => {
       if (fname != null) {
         setFirstName(fname);
         setupdateFname(fname);
+        console.log(fname);
       }
     });
 
-    AsyncStorage.getItem('signin_user_lastname').then(lname => {
+    await AsyncStorage.getItem('signin_user_lastname').then(lname => {
       if (lname != null) {
         setLastName(lname);
         setupdateLname(lname);
+        console.log(lname);
       }
     });
 
-    AsyncStorage.getItem('is_signin_user').then(userId => {
+    await AsyncStorage.getItem('is_signin_user').then(userId => {
       if (userId != null) {
         setUserId(userId);
+        console.log(userId);
       }
     });
-  }
+  };
 
   const logoutMe = async () => {
     firebaseAuthUtil.signout();
 
     await AsyncStorage.removeItem('signin_user_firstname');
     await AsyncStorage.removeItem('signin_user_lastname');
-    await AsyncStorage.removeItem('top_score');
     await AsyncStorage.removeItem('signin_user_email');
     await AsyncStorage.removeItem('is_signin_user');
+    await AsyncStorage.removeItem('top_score');
+    await AsyncStorage.removeItem('community_rank_1');
+    await AsyncStorage.removeItem('community_rank_2');
+    await AsyncStorage.removeItem('community_rank_3');
+
+    await AsyncStorage.getItem('is_signin_user').then(userId => {
+      if (userId != null) {
+        setUserId(userId);
+        console.log('Removed' + userId);
+      } else {
+        console.log('Removed');
+      }
+    });
 
     setIsAccountVisible(false);
     setIsLogoutScreenVisible(false);
     navigation.navigate('WelcomScreen');
   };
 
-  const findScores = () => {
-    // fetch top scores for community as well
-    AsyncStorage.getItem('top_score').then(tScore => {
+  const findScores = async () => {
+    // fetch top scores
+    await AsyncStorage.getItem('top_score').then(tScore => {
       setTopScore(tScore);
-      console.log('Fetched item');
     });
+
+    //find community top scores
+    //Check connection
+    //If(connection){
+    //fetch from community
+    // }
+    // else{
+    await AsyncStorage.getItem('community_rank_1').then(_1st => {
+      setC_1stPlace(_1st);
+    });
+
+    await AsyncStorage.getItem('community_rank_2').then(_2nd => {
+      setC_2ndPlace(_2nd);
+    });
+
+    await AsyncStorage.getItem('community_rank_3').then(_3rd => {
+      setC_3rdPlace(_3rd);
+    });
+    // }
   };
 
   const changeMypassword = async () => {
@@ -159,10 +207,12 @@ const HomeScreen = ({navigation}) => {
     }
     setresetPerrorFlag({});
 
-    setIsChangePasswordScreenVisible(!await firebaseAuthUtil.changeUserPassword(
-      currentPassword,
-      newPassword,
-    ));
+    setIsChangePasswordScreenVisible(
+      !(await firebaseAuthUtil.changeUserPassword(
+        currentPassword,
+        newPassword,
+      )),
+    );
     console.log('chnage password');
   };
 
@@ -188,6 +238,7 @@ const HomeScreen = ({navigation}) => {
     setIsUpdateInfoScreenVisible(false);
 
     console.log('updated info');
+    await loadUserDataFromAsyncStorage();
   };
 
   const customShare = async () => {
@@ -708,17 +759,19 @@ const HomeScreen = ({navigation}) => {
                   // ...FONTS.header3,
                   fontSize: 25,
                   marginTop: 5,
-                  marginBottom:20,
+                  marginBottom: 10,
                   textAlign: 'center',
                   color: 'red',
-                  fontWeight:'bold',
+                  fontWeight: 'bold',
                 }}>
                 {topScore}
               </Text>
               {isLoginUser ? (
                 <View>
-                  <Text style={{...FONTS.header2}}>Community</Text>
-                  <Text style={{...FONTS.header2, fontSize:15}}>Top three players in the world!</Text>
+                  <Text style={{...FONTS.header2}}>Community Ranks</Text>
+                  <Text style={{...FONTS.header2, fontSize: 15}}>
+                    Top three players in the world!
+                  </Text>
 
                   {/* 1st */}
                   <View
@@ -749,7 +802,7 @@ const HomeScreen = ({navigation}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                       }}>
-                      Kevin - 2761
+                      {c_1stPlace}
                     </Text>
                   </View>
 
@@ -782,7 +835,7 @@ const HomeScreen = ({navigation}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                       }}>
-                      Jhon - 1761
+                      {c_2ndPlace}
                     </Text>
                   </View>
 
@@ -815,7 +868,7 @@ const HomeScreen = ({navigation}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                       }}>
-                      Andrew - 973
+                      {c_3rdPlace}
                     </Text>
                   </View>
                 </View>

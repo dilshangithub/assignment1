@@ -89,7 +89,7 @@ function validateResetPasswordForm(
       reEnterPasswordError: 'Please re-enter your new password',
     };
   }
-  if(newPassword.trim() != reEnterPassword.trim()){
+  if (newPassword.trim() != reEnterPassword.trim()) {
     error = {
       ...error,
       reEnterPasswordError: 'Passwords are not match.',

@@ -35,11 +35,11 @@ const SignupScreen = ({navigation}) => {
 
   const [errorFlag, setErrorFlag] = React.useState({});
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [user, setUser] = React.useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [user, setUser] = useState(null);
   const [loaderVisible, setLoaderVisible] = useState(false);
 
   const [showPassword, setshowPassword] = useState(false);
@@ -59,27 +59,18 @@ const SignupScreen = ({navigation}) => {
     }
 
     setErrorFlag({});
+    setLoaderVisible(true);
 
-    // setLoaderVisible(true);
-    setUser(await firebaseAuthUtil.createUser(email, password, firstName, lastName));
-
-    // if (user != null) {
-      //save user data in asyn storage
-      // await AsyncStorage.setItem('signin_user_firstname', firstName);
-      // await AsyncStorage.setItem('signin_user_lastname', lastName);
-      // await AsyncStorage.setItem('top_score', topScore.toString());
-      // await AsyncStorage.setItem('signin_user_email', user.email.toString());
-      // await AsyncStorage.setItem('is_signin_user', user.uid.toString());
-
-      // navigation.navigate('HomeScreen');
-    // }
+    setUser(
+      await firebaseAuthUtil.createUser(email, password, firstName, lastName),
+    );
   };
 
-    useEffect(() => {
+  useEffect(() => {
     console.log(user);
     if (user != null) {
       setLoaderVisible(false);
-      navigation.navigate('HomeScreen');
+      navigation.navigate('WelcomScreen');
     } else {
       setLoaderVisible(false);
     }
