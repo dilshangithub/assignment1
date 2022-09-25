@@ -9,6 +9,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Platform,
 } from 'react-native';
 
 import {
@@ -21,6 +22,7 @@ import Share from 'react-native-share';
 import KeepAwake from 'react-native-keep-awake';
 import {MenuProvider} from 'react-native-popup-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 import icons from '../../components/icons';
 import SuccessButton from '../../components/buttons/successbutton';
 import WarningButton from '../../components/buttons/warningbutton';
@@ -77,23 +79,16 @@ const HomeScreen = ({navigation}) => {
   const [updateFname, setupdateFname] = useState('');
   const [updateLname, setupdateLname] = useState('');
   const [userId, setUserId] = useState('');
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState('');
 
   const [c_1stPlace, setC_1stPlace] = useState('');
   const [c_2ndPlace, setC_2ndPlace] = useState('');
   const [c_3rdPlace, setC_3rdPlace] = useState('');
 
-  // const focus = useIsFocused();
-
-  // useEffect(() => {
-  //   if(focus == true){
-  //     loadUserDataFromAsyncStorage();
-  //   }
-
-  // },[focus]);
-
   useEffect(() => {
     loadUserDataFromAsyncStorage();
-  }, []);
+    syncWithCloud();
+  }, [isUpdateAvailable]);
 
   const pauseAudio = () => {
     if (isMute) {
@@ -141,6 +136,33 @@ const HomeScreen = ({navigation}) => {
         console.log(userId);
       }
     });
+
+    await AsyncStorage.getItem('to_update_available').then(available => {
+      if (available != null) {
+        setIsUpdateAvailable(available);
+      }
+    });
+  };
+
+  //check connection and upload data to cloud if exist
+  const syncWithCloud = async () => {
+    if (Platform.OS === 'android') {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Connected and update user data - Home');
+          //check data available in async storage
+          console.log(isUpdateAvailable);
+
+          if (isUpdateAvailable === 'true') {
+            firebaseAuthUtil.updateUserData(userId, email, firstName, lastName);
+            AsyncStorage.removeItem('to_update_available');
+            console.log('Save after online');
+          }
+        } else {
+          console.log('Offline, save data in async storage');
+        }
+      });
+    }
   };
 
   const logoutMe = async () => {
@@ -161,25 +183,39 @@ const HomeScreen = ({navigation}) => {
     await AsyncStorage.getItem('top_score').then(tScore => {
       setTopScore(tScore);
     });
+    //find community top scores - Check connection
+    if (Platform.OS === 'android') {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Connected and fetch data online');
+          firebaseAuthUtil.fetchAndSaveCommunityRanks();
+          AsyncStorage.getItem('community_rank_1').then(_1st => {
+            setC_1stPlace(_1st);
+          });
 
-    //find community top scores
-    //Check connection
-    //If(connection){
-    //fetch from community
-    // }
-    // else{
-    await AsyncStorage.getItem('community_rank_1').then(_1st => {
-      setC_1stPlace(_1st);
-    });
+          AsyncStorage.getItem('community_rank_2').then(_2nd => {
+            setC_2ndPlace(_2nd);
+          });
 
-    await AsyncStorage.getItem('community_rank_2').then(_2nd => {
-      setC_2ndPlace(_2nd);
-    });
+          AsyncStorage.getItem('community_rank_3').then(_3rd => {
+            setC_3rdPlace(_3rd);
+          });
+        } else {
+          console.log('Not Connected and fetch data offonline');
+          AsyncStorage.getItem('community_rank_1').then(_1st => {
+            setC_1stPlace(_1st);
+          });
 
-    await AsyncStorage.getItem('community_rank_3').then(_3rd => {
-      setC_3rdPlace(_3rd);
-    });
-    // }
+          AsyncStorage.getItem('community_rank_2').then(_2nd => {
+            setC_2ndPlace(_2nd);
+          });
+
+          AsyncStorage.getItem('community_rank_3').then(_3rd => {
+            setC_3rdPlace(_3rd);
+          });
+        }
+      });
+    }
   };
 
   const changeMypassword = async () => {
@@ -216,12 +252,25 @@ const HomeScreen = ({navigation}) => {
     }
     setupdateInfoErrorFlag({});
 
-    await firebaseAuthUtil.updateUserData(
-      userId,
-      email,
-      updateFname,
-      updateLname,
-    );
+    if (Platform.OS === 'android') {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Connected and update user data');
+          firebaseAuthUtil.updateUserData(
+            userId,
+            email,
+            updateFname,
+            updateLname,
+          );
+        } else {
+          console.log('Offline, save data in async storage');
+          AsyncStorage.setItem('signin_user_firstname', updateFname),
+            AsyncStorage.setItem('signin_user_lastname', updateLname),
+            AsyncStorage.setItem('to_update_available', 'true');
+        }
+      });
+    }
+
     setIsUpdateInfoScreenVisible(false);
 
     console.log('updated info');
@@ -230,8 +279,9 @@ const HomeScreen = ({navigation}) => {
 
   const customShare = async () => {
     const shareOptions = {
-      message: 'Hey, Do you like to play Taxi Driver? Join with us..',
-      url: 'www.taxidriver.com',
+      message:
+        'Hey, Would you like to play an awesome game?  Hurry Up and download Taxi Driver via this URL..',
+      url: 'https://drive.google.com/drive/folders/1vuvTKW68DTE7SuKfIwwQWMJRkoz-w5VM?usp=sharing',
     };
     try {
       const shareResponse = await Share.open(shareOptions);
@@ -910,9 +960,9 @@ const HomeScreen = ({navigation}) => {
               <Text style={{...FONTS.header1, marginTop: 20}}>About game</Text>
               <Text style={{marginTop: 10, textAlign: 'center'}}>
                 A game is a structured form of play, usually undertaken for
-                entertainment or fun. This Taxi driver is a fun game that you
-                can play in your fun times. You can see your community places as
-                well. We will provide more updates.
+                entertainment or fun. The TAXI DRIVER is a fun game that you can
+                play in your fun times. You can see your place in world ranks as
+                well. We will provide more updates as soon as possible.
               </Text>
 
               <Text style={{marginTop: 10, textAlign: 'center'}}>

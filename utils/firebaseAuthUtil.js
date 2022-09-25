@@ -45,19 +45,13 @@ async function createUser(useremail, password, firstName, lastName) {
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
-        console.log('The Email address is already taken.');
-        Alert.alert('Warning', 'The Email address is already taken.', [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ]);
+        console.log('The Email has already been taken!');
+        Alert.alert(
+          'Email has already been taken!',
+          'An email can only be use on one account at a time. Try again with different email address.',
+          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        );
       }
-      if (error.code === 'auth/invalid-email') {
-        console.log('The Email address is invalid.');
-
-        Alert.alert('Warning', 'The Email address is  is invalid.', [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ]);
-      }
-
       console.error(error);
     });
 
@@ -101,9 +95,11 @@ async function loginUser(email, password) {
     .catch(error => {
       console.log('Cannot sign in');
 
-      Alert.alert('Warning', 'Cannot sign in', [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ]);
+      Alert.alert(
+        'Login Failed!',
+        "We couldn't sign you in. Please try agin later.",
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      );
 
       console.error(error);
     });
@@ -126,23 +122,25 @@ async function fetchAndSaveCommunityRanks() {
     });
     console.log(userObjects);
 
-    var sortJsonArray = require('sort-json-array');
-    const sortedUserList = sortJsonArray(userObjects, 'topscore', 'des');
+    // var sortJsonArray = require('sort-json-array');
+    // const sortedUserList1 = sortJsonArray(userObjects, 'topscore', 'des');
+    const sortedUserList2 = userObjects.sort((a, b) => b.topscore - a.topscore);
 
-    console.log(sortedUserList);
+    // console.log(sortedUserList1);
+    console.log(sortedUserList2);
 
     for (let i = 0; i < 3; i++) {
       let place = i + 1;
       AsyncStorage.setItem(
         'community_rank_' + place,
-        sortedUserList[i].firstname + ' - ' + sortedUserList[i].topscore,
+        sortedUserList2[i].firstname + ' - ' + sortedUserList2[i].topscore,
       );
       console.log(
         place +
           ' - ' +
-          sortedUserList[i].firstname +
+          sortedUserList2[i].firstname +
           ' - ' +
-          sortedUserList[i].topscore,
+          sortedUserList2[i].topscore,
       );
     }
   });
@@ -159,6 +157,10 @@ async function signout() {
 
 async function updateUserData(userId, email, updateFname, updateLname) {
   console.log('Triggered Firebase/Auth/updateUserData');
+  console.log(userId);
+  console.log(updateFname);
+  console.log(updateLname);
+
   await fireStore()
     .collection('users')
     .doc(userId)
@@ -172,7 +174,6 @@ async function updateUserData(userId, email, updateFname, updateLname) {
     );
 }
 
-//Need to check internet connection. if the connection is not available, need to store data in async storage
 async function updateTopScore(userId, topScore) {
   console.log('Triggered Firebase/Auth/UpdateTopscore');
   await fireStore()
@@ -197,14 +198,16 @@ async function changeUserPassword(curPass, newPass) {
       user
         .updatePassword(newPass)
         .then(() => {
-          Alert.alert('Success', 'Password was changed successfully.', [
-            {text: 'OK', onPress: () => console.log('Password was changed.')},
-          ]);
+          Alert.alert(
+            'Password Updated!',
+            'Your password has been changed successfully. use your new password to log in.',
+            [{text: 'OK', onPress: () => console.log('Password was changed.')}],
+          );
         })
         .catch(error => {
           Alert.alert(
             'Warning',
-            'Someting went wrong while changing the password. Try again..',
+            'Someting went wrong while changing the password. Try again later..',
             [{text: 'OK', onPress: () => console.log('OK Pressed')}],
           );
           return false;
@@ -212,13 +215,31 @@ async function changeUserPassword(curPass, newPass) {
     })
     .catch(error => {
       Alert.alert(
-        'Warning',
-        'The password is invalid or the user does not have a password.',
+        'Cannot update your password!',
+        "Try again. That's not your current password!",
         [{text: 'OK', onPress: () => console.log('OK Pressed')}],
       );
       return false;
     });
   return true;
+}
+
+async function forgetPassword(email) {
+  let flag = false;
+  await auth()
+    .sendPasswordResetEmail(email)
+    .then(() => {
+      Alert.alert(
+        'We have emailed your password reset link',
+        'To following email address: ' +
+          email +
+          '. Check inbox as well as spams.',
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      );
+      flag = true;
+    });
+
+  return flag;
 }
 
 const firebaseAuthUtil = {
@@ -228,6 +249,8 @@ const firebaseAuthUtil = {
   updateUserData,
   updateTopScore,
   changeUserPassword,
+  fetchAndSaveCommunityRanks,
+  forgetPassword,
 };
 
 export default firebaseAuthUtil;

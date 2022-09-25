@@ -46,9 +46,9 @@ export default class Game extends Component {
   state = {
     x: 0, // initial x position of the player's car
     y: DEVICE_HEIGHT - 200, // initial y position of the player's car
-    isGameSetup: false, // if the world has been setup
-    isGamePaused: false, // if the game is currently paused
-    score: 0, // the current player score
+    isGameSetup: false,
+    isGamePaused: false,
+    score: 0,
     isVisiblePopup: false,
     message: '',
     topScore: 0,
@@ -180,7 +180,6 @@ export default class Game extends Component {
     };
   };
 
-  // getEntities()
   getEntities = (engine, world, car, road) => {
     const entities = {
       physics: {
@@ -282,7 +281,6 @@ export default class Game extends Component {
     });
 
     this.opposing_cars.forEach(item => {
-      // loop through all the blocks
       Matter.Body.set(item, {
         isStatic: false, // make the block susceptible to gravity again
       });
@@ -301,7 +299,7 @@ export default class Game extends Component {
   saveTopScore = () => {
     if (this.state.score > 0) {
       AsyncStorage.setItem('top_score', this.state.score.toString());
-      //upload topsocre into cloud
+      //upload topsocre in cloud
 
       AsyncStorage.getItem('is_signin_user').then(userId => {
         if (userId != null) {
@@ -348,7 +346,7 @@ export default class Game extends Component {
                 style={{
                   padding: 20,
                   borderRadius: 20,
-                  height: '50%',
+                  height: '60%',
                   marginLeft: 30,
                   marginRight: 30,
                   borderColor: '#73737',

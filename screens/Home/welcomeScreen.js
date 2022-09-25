@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import KeepAwake from 'react-native-keep-awake';
 import {
   View,
   ImageBackground,
   StyleSheet,
   Image,
-  Text,
   SafeAreaView,
   BackHandler,
 } from 'react-native';
@@ -44,19 +43,8 @@ const WelcomScreen = ({navigation}) => {
       AsyncStorage.setItem('game_profile', EASY_PROFILE.toString());
       console.log('Set default value');
     }
-
-    // AsyncStorage.getItem('profile').then(val => {
-    //   console.log(val);
-    // });
-    // AsyncStorage.setItem('profile', '0.5');
-    // console.log('Set default profile');
   };
 
-  // const fetchgameProfile = () => {
-  //   AsyncStorage.getItem('profile').then(val => {
-  //     console.log(val);
-  //   });
-  // };
 
   return (
     <SafeAreaView style={{flex: 1}}>

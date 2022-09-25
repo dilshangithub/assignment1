@@ -5,30 +5,36 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
-  TouchableOpacity,
-  Image,
+  ActivityIndicator,
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
-import LinearGradient from 'react-native-linear-gradient';
 
 import SuccessButton from '../../components/buttons/successbutton';
-import UrlButton from '../../components/buttons/urlbutton';
 import {FONTS} from '../../components/theme';
-import icons from '../../components/icons';
-import images from '../../components/images';
 import UpperNavBar from '../../components/upperNavBar';
 import textInputValidateUtil from '../../utils/textInputValidateUtil';
 import soundEffectsUtil from '../../utils/soundEffectsUtil';
+import firebaseAuthUtil from '../../utils/firebaseAuthUtil';
 
 KeepAwake.activate();
 
 const ForgotPasswordScreen = ({navigation}) => {
-  useEffect(() => {}, []);
-
   const [errorFlag, setErrorFlag] = useState({});
   const [email, setEmail] = useState('');
+  const [restSuccessFlag, setRestSuccessFlag] = useState(false);
+  const [loaderVisible, setLoaderVisible] = useState(false);
 
-  const resetMyPassword = () => {
+  useEffect(() => {
+    console.log(restSuccessFlag);
+    if (restSuccessFlag != false) {
+      setLoaderVisible(false);
+      navigation.navigate('LoginScreen');
+    } else {
+      setLoaderVisible(false);
+    }
+  }, [restSuccessFlag !== false]);
+
+  const resetMyPassword = async () => {
     let error = textInputValidateUtil.validateForgotPasswordForm(email);
 
     if (error) {
@@ -37,13 +43,20 @@ const ForgotPasswordScreen = ({navigation}) => {
     }
 
     setErrorFlag({});
-    alert('success');
+    setLoaderVisible(true);
+
+    setRestSuccessFlag(await firebaseAuthUtil.forgetPassword(email));
+    console.log('Password rest link sent');
   };
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1, backgroundColor: '#ddedea'}}>
         <UpperNavBar navigation={navigation} />
+
+        {loaderVisible ? (
+          <ActivityIndicator size="large" color="#977746" />
+        ) : null}
 
         <View style={{flex: 1}}>
           <Text style={{...FONTS.header1, marginTop: 25, color: '#ff6600'}}>
