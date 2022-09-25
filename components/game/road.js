@@ -16,15 +16,13 @@ const Road = ({body, size}) => {
         position: 'absolute',
         left: x,
         top: y,
-      }}
-    >
+      }}>
       <RoadLine width={width} height={height} top={0} />
       <RoadLine width={width} height={height} />
       <RoadLine width={width} height={height} />
       <RoadLine width={width} height={height} />
       <RoadLine width={width} height={height} />
     </View>
-    
   );
 };
 

@@ -9,6 +9,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Platform,
 } from 'react-native';
 
 import {
@@ -21,6 +22,7 @@ import Share from 'react-native-share';
 import KeepAwake from 'react-native-keep-awake';
 import {MenuProvider} from 'react-native-popup-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 import icons from '../../components/icons';
 import SuccessButton from '../../components/buttons/successbutton';
 import WarningButton from '../../components/buttons/warningbutton';
@@ -29,6 +31,7 @@ import soundEffectsUtil from '../../utils/soundEffectsUtil';
 import {FONTS} from '../../components/theme';
 import images from '../../components/images';
 import textInputValidateUtil from '../../utils/textInputValidateUtil';
+import firebaseAuthUtil from '../../utils/firebaseAuthUtil';
 import {
   EASY_PROFILE,
   MEDIUM_PROFILE,
@@ -39,6 +42,7 @@ KeepAwake.activate();
 
 const HomeScreen = ({navigation}) => {
   const [isMute, setIsMute] = useState(true);
+
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [isShareVisible, setIsShareVisible] = useState(false);
   const [isProfileVisible, setIsProfileVisible] = useState(false);
@@ -49,49 +53,172 @@ const HomeScreen = ({navigation}) => {
   const [isUpdateInfoScreenVisible, setIsUpdateInfoScreenVisible] =
     useState(false);
   const [isScoreBoardVisible, setIsScoreBoardVisible] = useState(false);
+
   const [isEasy, isSetEasy] = useState(false);
   const [isMedium, isSetMedium] = useState(false);
   const [isHard, isSetHard] = useState(false);
-  const [isLoginUser, isSetLoginUser] = useState(false); // need to implement: False
-  const [topScore, setTopScore] = React.useState(0);
 
-  const [resetPerrorFlag, setresetPerrorFlag] = React.useState({});
-  const [updateInfoErrorFlag, setupdateInfoErrorFlag] = React.useState({});
+  const [isLoginUser, isSetLoginUser] = useState(false);
 
-  const [currentPassword, setcurrentPassword] = React.useState('');
+  const [topScore, setTopScore] = useState(0);
+
+  const [resetPerrorFlag, setresetPerrorFlag] = useState({});
+  const [updateInfoErrorFlag, setupdateInfoErrorFlag] = useState({});
+
+  const [currentPassword, setcurrentPassword] = useState('');
   const [showCurrentPassword, setshowCurrentPassword] = useState(false);
-
-  const [newPassword, setNewPassword] = React.useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setshowNewPassword] = useState(false);
-
-  const [reEnterPassword, setReEnrterPassword] = React.useState('');
+  const [reEnterPassword, setReEnrterPassword] = useState('');
   const [showreEnterPassword, setshowreEnterPassword] = useState(false);
 
-  const [email, setEmail] = React.useState('');
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  const [updateFname, setupdateFname] = useState('');
+  const [updateLname, setupdateLname] = useState('');
+  const [userId, setUserId] = useState('');
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState('');
+
+  const [c_1stPlace, setC_1stPlace] = useState('');
+  const [c_2ndPlace, setC_2ndPlace] = useState('');
+  const [c_3rdPlace, setC_3rdPlace] = useState('');
+
+  useEffect(() => {
+    loadUserDataFromAsyncStorage();
+    syncWithCloud();
+  }, [isUpdateAvailable]);
 
   const pauseAudio = () => {
+    if (isMute) {
+      soundEffectsUtil.stopPlaying();
+    } else {
+      soundEffectsUtil.startPlaying();
+    }
     setIsMute(!isMute);
   };
 
-  const logoutMe = () => {
-    //Logout logic
-    //.....
+  const loadUserDataFromAsyncStorage = async () => {
+    await AsyncStorage.getItem('is_signin_user').then(getUser => {
+      if (getUser != null) {
+        isSetLoginUser(true);
+        console.log(getUser);
+      }
+    });
+
+    await AsyncStorage.getItem('signin_user_email').then(email => {
+      if (email != null) {
+        setEmail(email);
+        console.log(email);
+      }
+    });
+
+    await AsyncStorage.getItem('signin_user_firstname').then(fname => {
+      if (fname != null) {
+        setFirstName(fname);
+        setupdateFname(fname);
+        console.log(fname);
+      }
+    });
+
+    await AsyncStorage.getItem('signin_user_lastname').then(lname => {
+      if (lname != null) {
+        setLastName(lname);
+        setupdateLname(lname);
+        console.log(lname);
+      }
+    });
+
+    await AsyncStorage.getItem('is_signin_user').then(userId => {
+      if (userId != null) {
+        setUserId(userId);
+        console.log(userId);
+      }
+    });
+
+    await AsyncStorage.getItem('to_update_available').then(available => {
+      if (available != null) {
+        setIsUpdateAvailable(available);
+      }
+    });
+  };
+
+  //check connection and upload data to cloud if exist
+  const syncWithCloud = async () => {
+    if (Platform.OS === 'android') {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Connected and update user data - Home');
+          //check data available in async storage
+          console.log(isUpdateAvailable);
+
+          if (isUpdateAvailable === 'true') {
+            firebaseAuthUtil.updateUserData(userId, email, firstName, lastName);
+            AsyncStorage.removeItem('to_update_available');
+            console.log('Save after online');
+          }
+        } else {
+          console.log('Offline, save data in async storage');
+        }
+      });
+    }
+  };
+
+  const logoutMe = async () => {
+    const keys = await AsyncStorage.getAllKeys();
+    await AsyncStorage.multiRemove(keys);
+
+    const keys2 = await AsyncStorage.getAllKeys();
+    console.log('async keys');
+    console.log(keys2);
 
     setIsAccountVisible(false);
     setIsLogoutScreenVisible(false);
     navigation.navigate('WelcomScreen');
   };
 
-  const findScores = () => {  // fetch top scores for community as well
-    AsyncStorage.getItem('top_score').then(tScore => {
+  const findScores = async () => {
+    // fetch top scores
+    await AsyncStorage.getItem('top_score').then(tScore => {
       setTopScore(tScore);
-      console.log('Fetched item');
     });
+    //find community top scores - Check connection
+    if (Platform.OS === 'android') {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Connected and fetch data online');
+          firebaseAuthUtil.fetchAndSaveCommunityRanks();
+          AsyncStorage.getItem('community_rank_1').then(_1st => {
+            setC_1stPlace(_1st);
+          });
+
+          AsyncStorage.getItem('community_rank_2').then(_2nd => {
+            setC_2ndPlace(_2nd);
+          });
+
+          AsyncStorage.getItem('community_rank_3').then(_3rd => {
+            setC_3rdPlace(_3rd);
+          });
+        } else {
+          console.log('Not Connected and fetch data offonline');
+          AsyncStorage.getItem('community_rank_1').then(_1st => {
+            setC_1stPlace(_1st);
+          });
+
+          AsyncStorage.getItem('community_rank_2').then(_2nd => {
+            setC_2ndPlace(_2nd);
+          });
+
+          AsyncStorage.getItem('community_rank_3').then(_3rd => {
+            setC_3rdPlace(_3rd);
+          });
+        }
+      });
+    }
   };
 
-  const changeMypassword = () => {
+  const changeMypassword = async () => {
     const error = textInputValidateUtil.validateResetPasswordForm(
       currentPassword,
       newPassword,
@@ -102,11 +229,17 @@ const HomeScreen = ({navigation}) => {
       return;
     }
     setresetPerrorFlag({});
-    // logic
+
+    setIsChangePasswordScreenVisible(
+      !(await firebaseAuthUtil.changeUserPassword(
+        currentPassword,
+        newPassword,
+      )),
+    );
     console.log('chnage password');
   };
 
-  const updateMyInformation = () => {
+  const updateMyInformation = async () => {
     const error = textInputValidateUtil.validateUpdateInfoForm(
       email,
       firstName,
@@ -118,14 +251,37 @@ const HomeScreen = ({navigation}) => {
       return;
     }
     setupdateInfoErrorFlag({});
-    // logic
+
+    if (Platform.OS === 'android') {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Connected and update user data');
+          firebaseAuthUtil.updateUserData(
+            userId,
+            email,
+            updateFname,
+            updateLname,
+          );
+        } else {
+          console.log('Offline, save data in async storage');
+          AsyncStorage.setItem('signin_user_firstname', updateFname),
+            AsyncStorage.setItem('signin_user_lastname', updateLname),
+            AsyncStorage.setItem('to_update_available', 'true');
+        }
+      });
+    }
+
+    setIsUpdateInfoScreenVisible(false);
+
     console.log('updated info');
+    await loadUserDataFromAsyncStorage();
   };
 
   const customShare = async () => {
     const shareOptions = {
-      message: 'Hey, Do you like to play Taxi Driver? Join with us..',
-      url: 'www.taxidriver.com',
+      message:
+        'Hey, Would you like to play an awesome game?  Hurry Up and download Taxi Driver via this URL..',
+      url: 'https://drive.google.com/drive/folders/1vuvTKW68DTE7SuKfIwwQWMJRkoz-w5VM?usp=sharing',
     };
     try {
       const shareResponse = await Share.open(shareOptions);
@@ -287,9 +443,10 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Email"
+              placeholder={email}
               placeholderTextColor="#c2c2a3"
               onChangeText={value => setEmail(value)}
+              editable={false}
             />
           </View>
 
@@ -304,9 +461,9 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="First Name"
+              placeholder={firstName}
               placeholderTextColor="#c2c2a3"
-              onChangeText={value => setFirstName(value)}
+              onChangeText={value => setupdateFname(value)}
             />
           </View>
 
@@ -321,9 +478,9 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Last Name"
+              placeholder={lastName}
               placeholderTextColor="#c2c2a3"
-              onChangeText={value => setLastName(value)}
+              onChangeText={value => setupdateLname(value)}
             />
           </View>
 
@@ -633,20 +790,25 @@ const HomeScreen = ({navigation}) => {
                 />
               </TouchableOpacity>
 
-              <Text style={{...FONTS.header2}}>Top Score</Text>
+              <Text style={{...FONTS.header2}}>Your Top Score</Text>
               <Text
                 style={{
                   // ...FONTS.header3,
                   fontSize: 25,
-                  marginTop: 30,
+                  marginTop: 5,
+                  marginBottom: 10,
                   textAlign: 'center',
                   color: 'red',
+                  fontWeight: 'bold',
                 }}>
                 {topScore}
               </Text>
               {isLoginUser ? (
                 <View>
-                  <Text style={{...FONTS.header2}}>Community</Text>
+                  <Text style={{...FONTS.header2}}>Community Ranks</Text>
+                  <Text style={{...FONTS.header2, fontSize: 15}}>
+                    Top three players in the world!
+                  </Text>
 
                   {/* 1st */}
                   <View
@@ -677,7 +839,7 @@ const HomeScreen = ({navigation}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                       }}>
-                      Kevin - 2761
+                      {c_1stPlace}
                     </Text>
                   </View>
 
@@ -710,7 +872,7 @@ const HomeScreen = ({navigation}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                       }}>
-                      Jhon - 1761
+                      {c_2ndPlace}
                     </Text>
                   </View>
 
@@ -743,7 +905,7 @@ const HomeScreen = ({navigation}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                       }}>
-                      Andrew - 973
+                      {c_3rdPlace}
                     </Text>
                   </View>
                 </View>
@@ -798,13 +960,14 @@ const HomeScreen = ({navigation}) => {
               <Text style={{...FONTS.header1, marginTop: 20}}>About game</Text>
               <Text style={{marginTop: 10, textAlign: 'center'}}>
                 A game is a structured form of play, usually undertaken for
-                entertainment or fun. This Taxi driver is a fun game that you can play in your fun times. You can see your community places as well. We will provide more updates.
+                entertainment or fun. The TAXI DRIVER is a fun game that you can
+                play in your fun times. You can see your place in world ranks as
+                well. We will provide more updates as soon as possible.
               </Text>
 
               <Text style={{marginTop: 10, textAlign: 'center'}}>
                 Version: 1.0
               </Text>
-
             </View>
           </View>
         </Modal>
@@ -1029,7 +1192,7 @@ const HomeScreen = ({navigation}) => {
                   marginTop: 30,
                   textAlign: 'center',
                 }}>
-                Dilshan
+                {firstName}
               </Text>
               <Text
                 style={{
@@ -1038,7 +1201,7 @@ const HomeScreen = ({navigation}) => {
                   marginTop: 10,
                   textAlign: 'center',
                 }}>
-                uggdilshan.gmail.com
+                {email}
               </Text>
               <View style={{marginTop: 20, marginLeft: 70, marginRight: 70}}>
                 <WarningButton
@@ -1262,7 +1425,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     marginTop: -250,
-    marginBottom:40
+    marginBottom: 40,
     // flex: 1,
   },
 
